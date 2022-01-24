@@ -20,12 +20,19 @@ function Login() {
       return;
     }
     if (user) navigate("/");
-  }, [user, loading]);
+  }, [user, loading, navigate]);
 
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
-        <form className="box" noValidate>
+        <form
+          className="box"
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            logInWithEmailAndPassword(email, password);
+          }}
+        >
           <div className="field">
             <label htmlFor="email" className="label">
               Email
@@ -63,10 +70,7 @@ function Login() {
               </span>
             </div>
           </div>
-          <Button
-            className="is-success"
-            onClick={() => logInWithEmailAndPassword(email, password)}
-          >
+          <Button className="is-success" type="submit">
             Войти
           </Button>
         </form>

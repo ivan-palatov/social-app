@@ -23,20 +23,21 @@ function Register() {
   const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
 
-  const register = () => {
+  const register = (e: any) => {
     // TODO: validate inputs
+    e.preventDefault();
     registerWithEmailAndPassword(name, email, password);
   };
 
   useEffect(() => {
     if (loading) return;
     if (user) navigate("/");
-  }, [user, loading]);
+  }, [user, loading, navigate]);
 
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
-        <form className="box" noValidate>
+        <form className="box" noValidate onSubmit={register}>
           <div className="field">
             <label htmlFor="name" className="label">
               Отображаемое имя
@@ -93,7 +94,7 @@ function Register() {
               </span>
             </div>
           </div>
-          <Button className="is-success" onClick={register}>
+          <Button className="is-success" type="submit">
             Зарегистрироваться
           </Button>
         </form>

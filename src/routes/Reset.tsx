@@ -1,4 +1,7 @@
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, sendPasswordReset } from "../firebase";
@@ -12,26 +15,47 @@ function Reset() {
   useEffect(() => {
     if (loading) return;
     if (user) navigate("/");
-  }, [user, loading]);
+  }, [user, loading, navigate]);
 
   return (
-    <div className="reset">
-      <div className="reset__container">
-        <input
-          type="text"
-          className="reset__textBox"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="E-mail Address"
-        />
-        <button className="reset__btn" onClick={() => sendPasswordReset(email)}>
-          Send password reset email
-        </button>
+    <Columns className="is-centered">
+      <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
+        <form
+          className="box"
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendPasswordReset(email);
+          }}
+        >
+          <div className="field">
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <div className="control has-icons-left">
+              <input
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="Email"
+                className="input"
+                required
+              />
+              <span className="icon is-small is-left">
+                <FontAwesomeIcon icon={faEnvelope} />
+              </span>
+            </div>
+          </div>
+          <Button className="is-success" type="submit">
+            Отправить смену пароля на email
+          </Button>
+        </form>
         <div>
-          Don't have an account? <Link to="/register">Register</Link> now.
+          Нет аккаунта? <Link to="/register">Зарегистрируйтесь</Link> сейчас.
         </div>
-      </div>
-    </div>
+      </Columns.Column>
+    </Columns>
   );
 }
 export default Reset;

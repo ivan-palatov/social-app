@@ -9,20 +9,20 @@ function Home() {
 
   const [user, loading] = useAuthState(auth);
 
-  const fetchUserName = async () => {
-    try {
-      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      setName(data.name);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
+        const data = doc.docs[0].data();
+        setName(data.name);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     fetchUserName();
-  }, [loading]);
+  }, [loading, user]);
 
   if (loading) {
     return <div>Загрузка...</div>;
