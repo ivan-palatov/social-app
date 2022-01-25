@@ -9,16 +9,6 @@ import Login from "./routes/Login";
 import Register from "./routes/Register";
 import Reset from "./routes/Reset";
 
-// firebase.initializeApp({
-//   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",
-//   authDomain: "social-9a688.firebaseapp.com",
-//   projectId: "social-9a688",
-//   storageBucket: "social-9a688.appspot.com",
-//   messagingSenderId: "405032755686",
-//   appId: "1:405032755686:web:422c31ad240e90f729b627",
-//   measurementId: "G-02S8YBVNRC",
-// });
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

@@ -43,6 +43,8 @@ const signInWithGoogle = async () => {
         name: user.displayName,
         authProvider: "google",
         email: user.email,
+        handle: user.email?.substring(0, user.email?.indexOf("@")),
+        createdAt: new Date().toISOString(),
       });
     }
   } catch (err) {
@@ -71,6 +73,8 @@ const registerWithEmailAndPassword = async (
       name,
       authProvider: "local",
       email,
+      handle: email.substring(0, email.indexOf("@")),
+      createdAt: new Date().toISOString(),
     });
   } catch (err) {
     console.error(err);
@@ -80,7 +84,6 @@ const registerWithEmailAndPassword = async (
 const sendPasswordReset = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
-    alert("Password reset link sent!");
   } catch (err) {
     console.error(err);
   }

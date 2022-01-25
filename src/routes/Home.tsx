@@ -2,6 +2,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Link } from "react-router-dom";
 import { auth, db, logout } from "../firebase";
 
 function Home() {
@@ -10,6 +11,8 @@ function Home() {
   const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
+    if (!user || loading) return;
+
     const fetchUserName = async () => {
       try {
         const q = query(collection(db, "users"), where("uid", "==", user?.uid));
@@ -29,7 +32,12 @@ function Home() {
   }
 
   if (!user) {
-    return <div>Войдите!</div>;
+    return (
+      <div>
+        Вы не авторизированы <Link to="/login">Войдите</Link> или{" "}
+        <Link to="/register">Зарегистрируйтесь</Link>
+      </div>
+    );
   }
 
   return (
