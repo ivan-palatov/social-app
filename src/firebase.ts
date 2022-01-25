@@ -16,6 +16,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const app = initializeApp({
   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",
@@ -29,29 +30,39 @@ const app = initializeApp({
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
+// Регистрация и авторизация ч/з Гугл
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
-    const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
+    const { user } = await signInWithPopup(auth, googleProvider);
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const docs = await getDocs(q);
-    if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
-        handle: user.email?.substring(0, user.email?.indexOf("@")),
-        createdAt: new Date().toISOString(),
-      });
+
+    // Если юзер уже существует в базе - останавливаемся
+    if (docs.docs.length !== 0) {
+      return;
     }
+
+    // Если ещё нет в базе - создаём
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      name: user.displayName,
+      authProvider: "google",
+      email: user.email,
+      handle: user.email?.substring(0, user.email?.indexOf("@")),
+      createdAt: new Date().toISOString(),
+      bio: "",
+      website: "",
+      avatar: "",
+    });
   } catch (err) {
     console.error(err);
   }
 };
 
+// Авторизация ч/з мэйл и пароль
 const logInWithEmailAndPassword = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -60,14 +71,19 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
   }
 };
 
+// Регистрация ч/з мэйл и пароль, создание соответствующего юзера
 const registerWithEmailAndPassword = async (
   name: string,
   email: string,
   password: string
 ) => {
   try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res.user;
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       name,
@@ -75,12 +91,16 @@ const registerWithEmailAndPassword = async (
       email,
       handle: email.substring(0, email.indexOf("@")),
       createdAt: new Date().toISOString(),
+      bio: "",
+      website: "",
+      avatar: "",
     });
   } catch (err) {
     console.error(err);
   }
 };
 
+// Отправка инструкций по сбросу пароля на почту
 const sendPasswordReset = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
@@ -96,6 +116,7 @@ const logout = () => {
 export {
   auth,
   db,
+  storage,
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
