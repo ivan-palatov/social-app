@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   auth,
   registerWithEmailAndPassword,
@@ -21,7 +21,6 @@ function Register() {
   const [name, setName] = useState("");
 
   const [user, loading] = useAuthState(auth);
-  const navigate = useNavigate();
 
   const register = (e: any) => {
     // TODO: validate inputs
@@ -31,8 +30,8 @@ function Register() {
 
   useEffect(() => {
     if (loading) return;
-    if (user) navigate("/");
-  }, [user, loading, navigate]);
+    if (user) window.location.assign("/edit");
+  }, [user, loading]);
 
   return (
     <Columns className="is-centered">

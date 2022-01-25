@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  User,
 } from "firebase/auth";
 import {
   addDoc,
@@ -14,6 +15,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -113,6 +115,23 @@ const logout = () => {
   signOut(auth);
 };
 
+const updateProfile = async (
+  name: string,
+  bio: string,
+  website: string,
+  user: User
+) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const doc = await getDocs(q);
+    const ref = doc.docs[0].ref;
+
+    await updateDoc(ref, { name, bio, website });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   auth,
   db,
@@ -122,4 +141,5 @@ export {
   registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
+  updateProfile,
 };
