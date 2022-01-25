@@ -5,6 +5,7 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import Edit from "./routes/Edit";
+import Feed from "./routes/Feed";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
@@ -20,6 +21,7 @@ ReactDOM.render(
           <Route path="register" element={<Register />} />
           <Route path="reset" element={<Reset />} />
           <Route path="edit" element={<Edit />} />
+          <Route path="feed" element={<Feed />} />
         </Route>
       </Routes>
     </BrowserRouter>

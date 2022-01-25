@@ -14,7 +14,10 @@ import {
   collection,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
   query,
+  startAfter,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -30,13 +33,13 @@ const app = initializeApp({
   measurementId: "G-02S8YBVNRC",
 });
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // Регистрация и авторизация ч/з Гугл
 const googleProvider = new GoogleAuthProvider();
-const signInWithGoogle = async () => {
+export const signInWithGoogle = async () => {
   try {
     const { user } = await signInWithPopup(auth, googleProvider);
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
@@ -65,7 +68,10 @@ const signInWithGoogle = async () => {
 };
 
 // Авторизация ч/з мэйл и пароль
-const logInWithEmailAndPassword = async (email: string, password: string) => {
+export const logInWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
@@ -74,7 +80,7 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
 };
 
 // Регистрация ч/з мэйл и пароль, создание соответствующего юзера
-const registerWithEmailAndPassword = async (
+export const registerWithEmailAndPassword = async (
   name: string,
   email: string,
   password: string
@@ -103,7 +109,7 @@ const registerWithEmailAndPassword = async (
 };
 
 // Отправка инструкций по сбросу пароля на почту
-const sendPasswordReset = async (email: string) => {
+export const sendPasswordReset = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
   } catch (err) {
@@ -111,11 +117,12 @@ const sendPasswordReset = async (email: string) => {
   }
 };
 
-const logout = () => {
+export const logout = () => {
   signOut(auth);
 };
 
-const updateProfile = async (
+// Изменение информации о юзере
+export const updateProfile = async (
   name: string,
   bio: string,
   website: string,
@@ -132,14 +139,61 @@ const updateProfile = async (
   }
 };
 
-export {
-  auth,
-  db,
-  storage,
-  signInWithGoogle,
-  logInWithEmailAndPassword,
-  registerWithEmailAndPassword,
-  sendPasswordReset,
-  logout,
-  updateProfile,
+// Получение первых 10-и постов в фид
+export const getPosts = async () => {
+  try {
+    const q = query(
+      collection(db, "posts"),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
+    const docs = await getDocs(q);
+    const lastCreated: string = docs.docs[docs.size - 1].data().createdAt;
+
+    return {
+      lastCreated,
+      posts: docs.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
+      size: docs.size,
+    };
+  } catch (error) {
+    console.error(error);
+    return { posts: [], size: 0 };
+  }
+};
+
+// Получение последующих 10-и постов в фид
+export const getMorePosts = async (prevCreated: string) => {
+  try {
+    const q = query(
+      collection(db, "posts"),
+      orderBy("createdAt", "desc"),
+      startAfter(prevCreated),
+      limit(10)
+    );
+    const docs = await getDocs(q);
+    const lastCreated: string = docs.docs[docs.size - 1].data().createdAt;
+
+    return {
+      lastCreated,
+      posts: docs.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
+      size: docs.size,
+    };
+  } catch (error) {
+    console.error(error);
+    return { posts: [], size: 0 };
+  }
+};
+
+export const createPost = async (body: string, user: User) => {
+  try {
+    await addDoc(collection(db, "posts"), {
+      createdAt: new Date().toISOString(),
+      body,
+      user: user.email!.substring(0, user.email!.indexOf("@")),
+      likes: 0,
+      comments: 0,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
