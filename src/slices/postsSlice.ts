@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   collection,
-  DocumentData,
   getDocs,
   limit,
   orderBy,
   query,
-  QuerySnapshot,
   startAfter,
 } from "firebase/firestore";
 import { db } from "../firebase";
@@ -23,20 +21,16 @@ export interface IPost {
 
 interface IPostsState {
   posts: IPost[];
-  loading: boolean;
   lastCreatedAt: string;
   hasMore: boolean;
-  hasNewSnapshot: boolean;
   latestSnapshot: IPost[];
   fetchedMore: boolean;
 }
 
 const initialState: IPostsState = {
   posts: [],
-  loading: true,
   hasMore: true,
   lastCreatedAt: "",
-  hasNewSnapshot: false,
   latestSnapshot: [],
   fetchedMore: false,
 };
@@ -57,48 +51,30 @@ export const postsSlice = createSlice({
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.hasMore = action.payload;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setHasNewSnapshot: (state, action: PayloadAction<boolean>) => {
-      state.hasNewSnapshot = action.payload;
-    },
-    setLatestSnapshot: (state, action: PayloadAction<IPost[]>) => {
-      state.latestSnapshot = action.payload;
-    },
     setFetchedMore: (state, action: PayloadAction<boolean>) => {
       state.fetchedMore = action.payload;
     },
+    setPostsFromLatestSnapshot: (state) => {
+      state.posts = state.latestSnapshot;
+      state.lastCreatedAt =
+        state.latestSnapshot[state.latestSnapshot.length - 1].createdAt;
+      state.latestSnapshot = [];
+      state.hasMore = true;
+    },
+    setPostsFromSnapshot: (state, action: PayloadAction<IPost[]>) => {
+      const { payload } = action;
+      // Если бесконечный скролл не делал доп. запросов, то меняем посты на нынешний снапшот
+      if (!state.fetchedMore) {
+        state.posts = payload;
+        state.lastCreatedAt = payload[payload.length - 1].createdAt;
+        return;
+      }
+
+      // Иначе - добавляем последний снапшот в "кэш"
+      state.latestSnapshot = payload;
+    },
   },
 });
-
-export const setPostsFromSnapshot =
-  (fetchedMore: boolean, snapshot: QuerySnapshot<DocumentData>) =>
-  (dispatch: AppDispatch) => {
-    if (!fetchedMore) {
-      dispatch(
-        setPosts(
-          snapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          })) as IPost[]
-        )
-      );
-      dispatch(
-        setLastCreatedAt(snapshot.docs[snapshot.size - 1].data().createdAt)
-      );
-      return;
-    }
-    dispatch(setHasNewSnapshot(true));
-    dispatch(
-      setLatestSnapshot(
-        snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        })) as IPost[]
-      )
-    );
-  };
 
 export const fetchMorePosts =
   (state: IPostsState) => async (dispatch: AppDispatch) => {
@@ -129,11 +105,10 @@ export const fetchMorePosts =
 export const {
   addPosts,
   setPosts,
-  setHasNewSnapshot,
-  setLoading,
   setHasMore,
   setLastCreatedAt,
-  setLatestSnapshot,
   setFetchedMore,
+  setPostsFromLatestSnapshot,
+  setPostsFromSnapshot,
 } = postsSlice.actions;
 export const postsReducer = postsSlice.reducer;
