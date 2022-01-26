@@ -58,7 +58,7 @@ const Feed: React.FC<IProps> = () => {
         <InfiniteScroll
           className="is-fullwidth"
           dataLength={state.posts.length}
-          next={() => dispatch(fetchMorePosts(state))}
+          next={() => dispatch(fetchMorePosts(state.lastCreatedAt))}
           hasMore={state.hasMore}
           loader={
             <progress className="progress is-small is-primary" max="100">

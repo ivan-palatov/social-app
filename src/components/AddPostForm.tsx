@@ -1,5 +1,3 @@
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -42,11 +40,7 @@ const AddPostForm: React.FC<IProps> = () => {
             style={{ margin: "10px 0" }}
             disabled={loading}
           >
-            {loading ? (
-              <FontAwesomeIcon icon={faSpinner} spin />
-            ) : (
-              "Опубликовать"
-            )}
+            Опубликовать
           </Button>
         </div>
       </div>

@@ -42,6 +42,16 @@ export const postsSlice = createSlice({
     addPosts: (state, action: PayloadAction<IPost[]>) => {
       state.posts = [...state.posts, ...action.payload];
     },
+    addLike: (state, action: PayloadAction<string>) => {
+      state.posts[
+        state.posts.findIndex((post) => post.id === action.payload)
+      ].likes += 1;
+    },
+    removeLike: (state, action: PayloadAction<string>) => {
+      state.posts[
+        state.posts.findIndex((post) => post.id === action.payload)
+      ].likes -= 1;
+    },
     setPosts: (state, action: PayloadAction<IPost[]>) => {
       state.posts = action.payload;
     },
@@ -77,11 +87,11 @@ export const postsSlice = createSlice({
 });
 
 export const fetchMorePosts =
-  (state: IPostsState) => async (dispatch: AppDispatch) => {
+  (lastCreatedAt: string) => async (dispatch: AppDispatch) => {
     const q = query(
       collection(db, "posts"),
       orderBy("createdAt", "desc"),
-      startAfter(state.lastCreatedAt),
+      startAfter(lastCreatedAt),
       limit(10)
     );
     const docs = await getDocs(q);
@@ -105,6 +115,8 @@ export const fetchMorePosts =
 export const {
   addPosts,
   setPosts,
+  addLike,
+  removeLike,
   setHasMore,
   setLastCreatedAt,
   setFetchedMore,

@@ -1,38 +1,19 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { auth, db, logout } from "../firebase";
+import { auth, logout } from "../firebase";
+import { useAppSelector } from "../hooks";
 
 function Home() {
-  const [name, setName] = useState("");
-
+  const state = useAppSelector((state) => state.user);
   const [user, loading] = useAuthState(auth);
 
-  useEffect(() => {
-    if (!user || loading) return;
-
-    const fetchUserName = async () => {
-      try {
-        const q = query(collection(db, "users"), where("uid", "==", user.uid));
-        const doc = await getDocs(q);
-        const data = doc.docs[0].data();
-
-        setName(data.name);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchUserName();
-  }, [loading, user]);
-
-  if (loading) {
+  if (loading || state.loading) {
     return <div>Загрузка...</div>;
   }
 
-  if (!user) {
+  if (!user || !state.user) {
     return (
       <div>
         Вы не авторизированы <Link to="/login">Войдите</Link> или{" "}
@@ -44,7 +25,7 @@ function Home() {
   return (
     <div>
       <div>
-        Вас зовут {name}
+        Вас зовут {state.user.name}
         <div>{user?.email}</div>
         <Button onClick={logout}>Выйти</Button>
       </div>
