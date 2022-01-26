@@ -1,15 +1,10 @@
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { IPost } from "../slices/postsSlice";
 import { timeSince } from "../utils/timeSince";
 
-interface IProps {
-  body: string;
-  likes: number;
-  comments: number;
-  createdAt: string;
-  [x: string]: any;
-}
+interface IProps extends IPost {}
 
 const Post: React.FC<IProps> = (props) => {
   return (

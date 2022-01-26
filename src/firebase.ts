@@ -14,10 +14,7 @@ import {
   collection,
   getDocs,
   getFirestore,
-  limit,
-  orderBy,
   query,
-  startAfter,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -136,51 +133,6 @@ export const updateProfile = async (
     await updateDoc(ref, { name, bio, website });
   } catch (error) {
     console.error(error);
-  }
-};
-
-// Получение первых 10-и постов в фид
-export const getPosts = async () => {
-  try {
-    const q = query(
-      collection(db, "posts"),
-      orderBy("createdAt", "desc"),
-      limit(10)
-    );
-    const docs = await getDocs(q);
-    const lastCreated: string = docs.docs[docs.size - 1].data().createdAt;
-
-    return {
-      lastCreated,
-      posts: docs.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
-      size: docs.size,
-    };
-  } catch (error) {
-    console.error(error);
-    return { posts: [], size: 0 };
-  }
-};
-
-// Получение последующих 10-и постов в фид
-export const getMorePosts = async (prevCreated: string) => {
-  try {
-    const q = query(
-      collection(db, "posts"),
-      orderBy("createdAt", "desc"),
-      startAfter(prevCreated),
-      limit(10)
-    );
-    const docs = await getDocs(q);
-    const lastCreated: string = docs.docs[docs.size - 1].data().createdAt;
-
-    return {
-      lastCreated,
-      posts: docs.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
-      size: docs.size,
-    };
-  } catch (error) {
-    console.error(error);
-    return { posts: [], size: 0 };
   }
 };
 

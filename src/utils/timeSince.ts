@@ -4,7 +4,7 @@ export function timeSince(isoString: string) {
 
   const secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
   if (secondsPast < 60) {
-    return secondsPast + "s";
+    return "Только что";
   }
   if (secondsPast < 3600) {
     return (secondsPast / 60).toFixed(0) + " мин. назад";

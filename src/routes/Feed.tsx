@@ -1,60 +1,47 @@
-import { DocumentData } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import {
+  collection,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import React, { useEffect } from "react";
 import { Columns } from "react-bulma-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AddPostForm from "../components/AddPostForm";
 import Post from "../components/Post";
-import { getMorePosts, getPosts } from "../firebase";
+import { db } from "../firebase";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { fetchMorePosts, setPostsFromSnapshot } from "../slices/postsSlice";
 
 interface IProps {}
 
 const Feed: React.FC<IProps> = () => {
-  const [posts, setPosts] = useState<DocumentData[]>([]);
-  const [lastCreated, setLastCreated] = useState<string | undefined>("");
-  const [size, setSize] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-
-  async function getOtherPosts() {
-    setLoading(true);
-    const posts = await getMorePosts(lastCreated!);
-
-    setPosts((oldPosts) => [...oldPosts, ...posts.posts]);
-    setLastCreated(posts.lastCreated);
-    setSize((oldSize) => oldSize + posts.size);
-    setLoading(false);
-
-    if (posts.size !== 10) {
-      setHasMore(false);
-    }
-  }
+  const state = useAppSelector((state) => state.posts);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    async function getFirstPosts() {
-      setLoading(true);
-      const posts = await getPosts();
+    const q = query(
+      collection(db, "posts"),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) =>
+      dispatch(setPostsFromSnapshot(state.fetchedMore, snapshot))
+    );
 
-      setPosts(posts.posts);
-      setLastCreated(posts.lastCreated);
-      setSize(posts.size);
-      setLoading(false);
-
-      if (posts.size !== 10) {
-        setHasMore(false);
-      }
-    }
-
-    getFirstPosts();
-  }, []);
+    return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.fetchedMore]);
 
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
         <AddPostForm />
         <InfiniteScroll
-          dataLength={size}
-          next={getOtherPosts}
-          hasMore={hasMore}
+          dataLength={state.posts.length}
+          next={() => dispatch(fetchMorePosts(state))}
+          hasMore={state.hasMore}
           loader={
             <progress className="progress is-small is-primary" max="100">
               15%
@@ -66,14 +53,8 @@ const Feed: React.FC<IProps> = () => {
             </p>
           }
         >
-          {posts.map((post) => (
-            <Post
-              body={post.body}
-              likes={post.likes}
-              comments={post.comments}
-              createdAt={post.createdAt}
-              key={post.id}
-            />
+          {state.posts.map((post) => (
+            <Post {...post} key={post.id} />
           ))}
         </InfiniteScroll>
       </Columns.Column>
