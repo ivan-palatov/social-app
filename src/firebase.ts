@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-const app = initializeApp({
+const firebaseConfig = {
   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",
   authDomain: "social-9a688.firebaseapp.com",
   projectId: "social-9a688",
@@ -28,7 +28,9 @@ const app = initializeApp({
   messagingSenderId: "405032755686",
   appId: "1:405032755686:web:422c31ad240e90f729b627",
   measurementId: "G-02S8YBVNRC",
-});
+};
+
+const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
@@ -57,7 +59,7 @@ export const signInWithGoogle = async () => {
       createdAt: new Date().toISOString(),
       bio: "",
       website: "",
-      avatar: "",
+      avatar: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`,
     });
   } catch (err) {
     console.error(err);
@@ -98,7 +100,7 @@ export const registerWithEmailAndPassword = async (
       createdAt: new Date().toISOString(),
       bio: "",
       website: "",
-      avatar: "",
+      avatar: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`,
     });
   } catch (err) {
     console.error(err);
