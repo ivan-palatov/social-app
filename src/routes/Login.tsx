@@ -1,6 +1,5 @@
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { mdiEmail, mdiGoogle, mdiLock } from "@mdi/js";
+import Icon from "@mdi/react";
 import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -46,7 +45,7 @@ function Login() {
                 required
               />
               <span className="icon is-small is-left">
-                <FontAwesomeIcon icon={faEnvelope} />
+                <Icon path={mdiEmail} />
               </span>
             </div>
           </div>
@@ -64,7 +63,7 @@ function Login() {
                 required
               />
               <span className="icon is-small is-left">
-                <FontAwesomeIcon icon={faLock} />
+                <Icon path={mdiLock} />
               </span>
             </div>
           </div>
@@ -82,7 +81,7 @@ function Login() {
           <div style={{ marginRight: 10 }}>Войти с помощью </div>
           <Button onClick={signInWithGoogle}>
             <span className="icon">
-              <FontAwesomeIcon icon={faGoogle} />
+              <Icon path={mdiGoogle} />
             </span>
           </Button>
         </div>

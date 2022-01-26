@@ -1,5 +1,5 @@
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { mdiEmail } from "@mdi/js";
+import Icon from "@mdi/react";
 import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -43,7 +43,7 @@ function Reset() {
                 required
               />
               <span className="icon is-small is-left">
-                <FontAwesomeIcon icon={faEnvelope} />
+                <Icon path={mdiEmail} />
               </span>
             </div>
           </div>

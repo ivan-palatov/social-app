@@ -1,5 +1,5 @@
-import { faGlobe, faPortrait } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { mdiFaceMan, mdiWeb } from "@mdi/js";
+import Icon from "@mdi/react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
@@ -69,7 +69,7 @@ const Edit: React.FC<IProps> = () => {
                 className="input"
               />
               <span className="icon is-small is-left">
-                <FontAwesomeIcon icon={faPortrait} />
+                <Icon path={mdiFaceMan} />
               </span>
             </div>
           </div>
@@ -87,7 +87,7 @@ const Edit: React.FC<IProps> = () => {
                 className="input"
               />
               <span className="icon is-small is-left">
-                <FontAwesomeIcon icon={faGlobe} />
+                <Icon path={mdiWeb} />
               </span>
             </div>
           </div>
@@ -105,7 +105,7 @@ const Edit: React.FC<IProps> = () => {
             </div>
           </div>
           <Button className="is-success" type="submit" disabled={waiting}>
-            {waiting ? "Сохраняем..." : "Сохранить"}
+            Сохранить
           </Button>
         </form>
       </Columns.Column>

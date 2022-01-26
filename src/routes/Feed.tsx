@@ -45,14 +45,18 @@ const Feed: React.FC<IProps> = () => {
 
   return (
     <Columns className="is-centered">
-      <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
+      <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
         <AddPostForm />
         {state.latestSnapshot.length !== 0 && (
-          <Button onClick={() => dispatch(setPostsFromLatestSnapshot())}>
+          <Button
+            onClick={() => dispatch(setPostsFromLatestSnapshot())}
+            className="is-fullwidth"
+          >
             Показать новые посты
           </Button>
         )}
         <InfiniteScroll
+          className="is-fullwidth"
           dataLength={state.posts.length}
           next={() => dispatch(fetchMorePosts(state))}
           hasMore={state.hasMore}
