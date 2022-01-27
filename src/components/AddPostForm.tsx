@@ -1,4 +1,4 @@
-import { mdiLink } from "@mdi/js";
+import { mdiLink, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
@@ -69,6 +69,13 @@ const AddPostForm: React.FC<IProps> = () => {
                   <Icon path={mdiLink} />
                 </span>
               </div>
+              {loading && (
+                <div className="level-item">
+                  <span className="icon">
+                    <Icon path={mdiLoading} spin />
+                  </span>
+                </div>
+              )}
             </div>
           </nav>
         </form>

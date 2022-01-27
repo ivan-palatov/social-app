@@ -13,13 +13,13 @@ export function timeSince(isoString: string) {
     return (secondsPast / 3600).toFixed(0) + " ч. назад";
   }
   if (secondsPast <= 2628000) {
-    return (secondsPast / 86400).toFixed + " д. назад";
+    return (secondsPast / 86400).toFixed(0) + " д. назад";
   }
   if (secondsPast <= 31536000) {
-    return (secondsPast / 2628000).toFixed + " мес. назад";
+    return (secondsPast / 2628000).toFixed(0) + " мес. назад";
   }
   if (secondsPast > 31536000) {
-    return (secondsPast / 31536000).toFixed + " г. назад";
+    return (secondsPast / 31536000).toFixed(0) + " г. назад";
   }
 }
 
