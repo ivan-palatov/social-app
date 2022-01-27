@@ -18,10 +18,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { IUser } from "./slices/userSlice";
+import { createPhotosNames } from "./utils/createPhotosNames";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",
   authDomain: "social-9a688.firebaseapp.com",
   projectId: "social-9a688",
@@ -139,8 +140,24 @@ export const updateProfile = async (
   }
 };
 
-export const createPost = async (body: string, user: IUser) => {
+export const uploadPhoto = async (photo: File, name: string) => {
   try {
+    await uploadBytes(ref(storage, name), photo);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const uploadPhotos = async (photos: File[], names: string[]) => {
+  return Promise.all(photos.map((photo, i) => uploadPhoto(photo, names[i])));
+};
+
+export const createPost = async (body: string, user: IUser, photos: File[]) => {
+  const photosNames = createPhotosNames(user.handle, photos);
+
+  try {
+    await uploadPhotos(photos, photosNames.names);
+
     await addDoc(collection(db, "posts"), {
       createdAt: new Date().toISOString(),
       body,
@@ -149,7 +166,7 @@ export const createPost = async (body: string, user: IUser) => {
       avatar: user.avatar,
       likes: 0,
       comments: 0,
-      photos: [], // TODO: add upload photos to post
+      photos: photosNames.photos,
     });
   } catch (error) {
     console.error(error);

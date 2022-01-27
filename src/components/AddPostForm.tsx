@@ -1,7 +1,8 @@
-import { mdiLink, mdiLoading } from "@mdi/js";
+import { mdiImage, mdiLink, mdiLoading, mdiUpload } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button } from "react-bulma-components";
+import { useDropzone } from "react-dropzone";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, createPost } from "../firebase";
 import { useAppSelector } from "../hooks";
@@ -14,6 +15,18 @@ const AddPostForm: React.FC<IProps> = () => {
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [photos, setPhotos] = useState<File[]>([]);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setPhotos(acceptedFiles);
+    setIsModalOpen(false);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: "image/*",
+    maxFiles: 4,
+  });
 
   const [user] = useAuthState(auth);
 
@@ -24,13 +37,16 @@ const AddPostForm: React.FC<IProps> = () => {
     }
 
     setLoading(true);
-    await createPost(body, state.user);
+    await createPost(body, state.user, photos);
+    setPhotos([]);
     setBody("");
     setLoading(false);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setBody(e.target.value);
+
+    // Делаем textarea автоматически расширяемой
     e.currentTarget.style.height = "inherit";
     e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
   }
@@ -75,6 +91,14 @@ const AddPostForm: React.FC<IProps> = () => {
                   <Icon path={mdiLink} />
                 </span>
               </div>
+              {photos.length !== 0 && (
+                <div className="level-item">
+                  <span className="icon is-medium">
+                    <span>{photos.length} </span>
+                    <Icon path={mdiImage} />
+                  </span>
+                </div>
+              )}
               {loading && (
                 <div className="level-item">
                   <span className="icon">
@@ -91,7 +115,19 @@ const AddPostForm: React.FC<IProps> = () => {
         isActive={isModalOpen}
         onClickOutside={() => setIsModalOpen(false)}
       >
-        <div>Перетащите сюда файл...</div>
+        <div className="file is-large is-boxed is-centered" {...getRootProps()}>
+          <label className="file-label">
+            <input className="file-input" {...getInputProps()} />
+            <span className="file-cta">
+              <span className="file-icon">
+                <Icon path={mdiUpload} />
+              </span>
+              <span className="file-label">
+                {isDragActive ? "Положите фото сюда" : "Переместите фото сюда"}
+              </span>
+            </span>
+          </label>
+        </div>
       </Modal>
     </>
   );
