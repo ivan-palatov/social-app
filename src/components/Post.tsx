@@ -25,7 +25,7 @@ const Post: React.FC<IProps> = (props) => {
       return;
     }
 
-    // Удаляем лайк
+    // Удаляем лайк, если он уже был
     if (state.user.likes.includes(props.id)) {
       dispatch(removeLike(props.id));
       dispatch(deleteLike(props.id, state.user.handle));

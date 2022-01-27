@@ -19,6 +19,7 @@ import {
   where,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { IUser } from "./slices/userSlice";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",
@@ -138,14 +139,17 @@ export const updateProfile = async (
   }
 };
 
-export const createPost = async (body: string, user: User) => {
+export const createPost = async (body: string, user: IUser) => {
   try {
     await addDoc(collection(db, "posts"), {
       createdAt: new Date().toISOString(),
       body,
-      user: user.email!.substring(0, user.email!.indexOf("@")),
+      user: user.handle,
+      name: user.name,
+      avatar: user.avatar,
       likes: 0,
       comments: 0,
+      photos: [], // TODO: add upload photos to post
     });
   } catch (error) {
     console.error(error);

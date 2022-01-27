@@ -7,10 +7,11 @@ import {
 } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { Button, Columns } from "react-bulma-components";
+import { useAuthState } from "react-firebase-hooks/auth";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AddPostForm from "../components/AddPostForm";
 import Post from "../components/Post";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   fetchMorePosts,
@@ -24,6 +25,7 @@ interface IProps {}
 const Feed: React.FC<IProps> = () => {
   const state = useAppSelector((state) => state.posts);
   const dispatch = useAppDispatch();
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     const q = query(
@@ -46,7 +48,11 @@ const Feed: React.FC<IProps> = () => {
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
-        <AddPostForm />
+        {
+          user && (
+            <AddPostForm />
+          ) /** TODO: if in user profile and not your profile - hide form */
+        }
         {state.latestSnapshot.length !== 0 && (
           <Button
             onClick={() => dispatch(setPostsFromLatestSnapshot())}

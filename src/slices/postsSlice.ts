@@ -17,6 +17,9 @@ export interface IPost {
   likes: number;
   comments: number;
   user: string;
+  name: string;
+  avatar: string;
+  photos: string[];
 }
 
 interface IPostsState {
@@ -80,7 +83,11 @@ export const postsSlice = createSlice({
         return;
       }
 
-      // Иначе - добавляем последний снапшот в "кэш"
+      // Иначе - добавляем последний снапшот в "кэш", если последний пост сменился
+      if (payload[0].id === state.posts[0].id) {
+        return;
+      }
+
       state.latestSnapshot = payload;
     },
   },

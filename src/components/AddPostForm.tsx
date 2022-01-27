@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, createPost } from "../firebase";
+import { useAppSelector } from "../hooks";
 
 interface IProps {}
 
 const AddPostForm: React.FC<IProps> = () => {
+  const state = useAppSelector((state) => state.user);
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -13,12 +15,12 @@ const AddPostForm: React.FC<IProps> = () => {
 
   async function savePost(e: any) {
     e.preventDefault();
-    if (!body) {
+    if (!body || !user || !state.user) {
       return;
     }
 
     setLoading(true);
-    await createPost(body, user!);
+    await createPost(body, state.user);
     setBody("");
     setLoading(false);
   }
