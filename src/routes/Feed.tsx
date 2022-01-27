@@ -7,11 +7,10 @@ import {
 } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { Button, Columns } from "react-bulma-components";
-import { useAuthState } from "react-firebase-hooks/auth";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AddPostForm from "../components/AddPostForm";
 import Post from "../components/Post";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   fetchMorePosts,
@@ -23,9 +22,11 @@ import {
 interface IProps {}
 
 const Feed: React.FC<IProps> = () => {
-  const state = useAppSelector((state) => state.posts);
+  const [postsState, userState] = useAppSelector((state) => [
+    state.posts,
+    state.user,
+  ]);
   const dispatch = useAppDispatch();
-  const [user] = useAuthState(auth);
 
   useEffect(() => {
     const q = query(
@@ -49,11 +50,11 @@ const Feed: React.FC<IProps> = () => {
     <Columns className="is-centered">
       <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
         {
-          user && (
+          userState.user && (
             <AddPostForm />
           ) /** TODO: if in user profile and not your profile - hide form */
         }
-        {state.latestSnapshot.length !== 0 && (
+        {postsState.latestSnapshot.length !== 0 && (
           <Button
             onClick={() => dispatch(setPostsFromLatestSnapshot())}
             className="is-fullwidth"
@@ -63,9 +64,9 @@ const Feed: React.FC<IProps> = () => {
         )}
         <InfiniteScroll
           className="is-fullwidth"
-          dataLength={state.posts.length}
-          next={() => dispatch(fetchMorePosts(state.lastCreatedAt))}
-          hasMore={state.hasMore}
+          dataLength={postsState.posts.length}
+          next={() => dispatch(fetchMorePosts(postsState.lastCreatedAt))}
+          hasMore={postsState.hasMore}
           loader={
             <progress className="progress is-small is-primary" max="100">
               15%
@@ -77,7 +78,7 @@ const Feed: React.FC<IProps> = () => {
             </p>
           }
         >
-          {state.posts.map((post) => (
+          {postsState.posts.map((post) => (
             <Post {...post} key={post.id} />
           ))}
         </InfiniteScroll>

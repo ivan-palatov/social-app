@@ -29,11 +29,17 @@ const AddPostForm: React.FC<IProps> = () => {
     setLoading(false);
   }
 
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setBody(e.target.value);
+    e.currentTarget.style.height = "inherit";
+    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+  }
+
   return (
     <>
       <article className="media">
         <figure className="media-left">
-          <p className="image is-64x64">
+          <p className="image is-48x48">
             <img src={state.user?.avatar} alt="Аватар" className="is-rounded" />
           </p>
         </figure>
@@ -43,10 +49,10 @@ const AddPostForm: React.FC<IProps> = () => {
               <textarea
                 id="body"
                 value={body}
-                onChange={(e) => setBody(e.target.value)}
-                className="textarea"
+                onChange={handleChange}
+                className="textarea is-clipped"
                 placeholder="Поделитесь своими мыслями..."
-                rows={2}
+                rows={1}
               />
             </div>
           </div>
