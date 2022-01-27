@@ -4,22 +4,22 @@ export function timeSince(isoString: string) {
 
   const secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
   if (secondsPast < 60) {
-    return "Только что";
+    return "Just now";
   }
   if (secondsPast < 3600) {
-    return (secondsPast / 60).toFixed(0) + " мин. назад";
+    return (secondsPast / 60).toFixed(0) + "m";
   }
   if (secondsPast <= 86400) {
-    return (secondsPast / 3600).toFixed(0) + " ч. назад";
+    return (secondsPast / 3600).toFixed(0) + "h";
   }
   if (secondsPast <= 2628000) {
-    return (secondsPast / 86400).toFixed(0) + " д. назад";
+    return (secondsPast / 86400).toFixed(0) + "d";
   }
   if (secondsPast <= 31536000) {
-    return (secondsPast / 2628000).toFixed(0) + " мес. назад";
+    return (secondsPast / 2628000).toFixed(0) + "m";
   }
   if (secondsPast > 31536000) {
-    return (secondsPast / 31536000).toFixed(0) + " г. назад";
+    return (secondsPast / 31536000).toFixed(0) + "y";
   }
 }
 

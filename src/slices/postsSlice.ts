@@ -76,6 +76,11 @@ export const postsSlice = createSlice({
     },
     setPostsFromSnapshot: (state, action: PayloadAction<IPost[]>) => {
       const { payload } = action;
+      if (payload.length === 0) {
+        state.hasMore = false;
+        return;
+      }
+
       // Если бесконечный скролл не делал доп. запросов, то меняем посты на нынешний снапшот
       if (!state.fetchedMore) {
         state.posts = payload;

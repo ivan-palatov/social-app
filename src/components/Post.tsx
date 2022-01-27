@@ -1,12 +1,8 @@
-import {
-  mdiClockOutline,
-  mdiComment,
-  mdiHeart,
-  mdiHeartOutline,
-} from "@mdi/js";
+import { mdiComment, mdiHeart, mdiHeartOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addLike, IPost, removeLike } from "../slices/postsSlice";
@@ -38,39 +34,69 @@ const Post: React.FC<IProps> = (props) => {
   }
 
   return (
-    <div className="card">
-      <div className="card-content">
-        <div className="content">{props.body}</div>
+    <article className="media">
+      <figure className="media-left">
+        <p className="image is-64x64">
+          <img className="is-rounded" src={props.avatar} alt="Аватар" />
+        </p>
+      </figure>
+      <div className="media-content">
+        <div className="content">
+          <p>
+            <strong>{props.name}</strong>{" "}
+            <Link to={`/${props.user}`}>
+              <small>@{props.user}</small>
+            </Link>{" "}
+            <small>{timeSince(props.createdAt)}</small>
+            <br />
+            {props.body}
+            {props.photos.length !== 0 && (
+              <>
+                <br />
+                {props.photos.map((photo, i) => (
+                  <img
+                    key={`${i}`}
+                    alt={`Фото ${i}`}
+                    src={photo}
+                    className="round-corners"
+                  />
+                ))}
+              </>
+            )}
+          </p>
+        </div>
+        <nav className="level is-mobile">
+          <div className="level-left">
+            <div className="level-item">
+              <span
+                className="icon-text mr-3 is-clickable"
+                onClick={handleLike}
+              >
+                <span>{props.likes}</span>
+                <span className="icon">
+                  <Icon
+                    path={
+                      state.user?.likes.includes(props.id)
+                        ? mdiHeart
+                        : mdiHeartOutline
+                    }
+                    color="red"
+                  />
+                </span>
+              </span>
+            </div>
+            <div className="level-item">
+              <span className="icon-text mr-3 is-clickable">
+                <span>{props.comments}</span>
+                <span className="icon">
+                  <Icon path={mdiComment} />
+                </span>
+              </span>
+            </div>
+          </div>
+        </nav>
       </div>
-      <div className="card-footer is-flex is-justify-content-space-around">
-        <span className="icon-text mr-3 is-clickable" onClick={handleLike}>
-          <span>{props.likes}</span>
-          <span className="icon">
-            <Icon
-              path={
-                state.user?.likes.includes(props.id)
-                  ? mdiHeart
-                  : mdiHeartOutline
-              }
-              color="red"
-            />
-          </span>
-        </span>
-        <span className="icon-text mr-3 is-clickable">
-          <span>{props.comments}</span>
-          <span className="icon">
-            <Icon path={mdiComment} />
-          </span>
-          <span>Комментариев</span>
-        </span>
-        <span className="icon-text">
-          <span className="icon">
-            <Icon path={mdiClockOutline} />
-          </span>
-          <span>{timeSince(props.createdAt)}</span>
-        </span>
-      </div>
-    </div>
+    </article>
   );
 };
 
