@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { IUser } from "./slices/userSlice";
-import { createPhotosNames } from "./utils/createPhotosNames";
+import { createPhotoName, createPhotosNames } from "./utils/createPhotosNames";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",
@@ -150,6 +150,22 @@ export const uploadPhoto = async (photo: File, name: string) => {
 
 export const uploadPhotos = async (photos: File[], names: string[]) => {
   return Promise.all(photos.map((photo, i) => uploadPhoto(photo, names[i])));
+};
+
+export const updateAvatar = async (photo: File, user: IUser) => {
+  const photoName = createPhotoName(user.handle, photo);
+
+  await uploadPhoto(photo, photoName.name);
+
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const doc = await getDocs(q);
+    const ref = doc.docs[0].ref;
+
+    await updateDoc(ref, { avatar: photoName.photo });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const createPost = async (body: string, user: IUser, photos: File[]) => {

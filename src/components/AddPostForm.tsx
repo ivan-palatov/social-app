@@ -27,6 +27,7 @@ const AddPostForm: React.FC<IProps> = () => {
     accept: "image/*",
     maxFiles: 4,
     maxSize: 5 * 1024 * 1024,
+    multiple: true,
   });
 
   const [user] = useAuthState(auth);

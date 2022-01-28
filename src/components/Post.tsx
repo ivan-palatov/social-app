@@ -16,7 +16,6 @@ const srlOptions = {
   settings: {
     disableKeyboardControls: true,
     disableWheelControls: true,
-    hideControlsAfter: 5000,
   },
   buttons: {
     showAutoplayButton: false,

@@ -13,3 +13,12 @@ export function createPhotosNames(handle: string, photos: File[]) {
     ),
   };
 }
+
+export function createPhotoName(handle: string, photo: File) {
+  const name = `${handle}_${new Date().getTime()}_${photo.name}`;
+
+  return {
+    name,
+    photo: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${name}?alt=media`,
+  };
+}
