@@ -12,6 +12,28 @@ code {
     monospace;
 }
 
-.round-corners {
-  border-radius: 6px;
+.image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 4px;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.image-grid-item {
+  border-radius: 3px;
+  object-fit: cover;
+  height: 100%;
+  max-height: 800px;
+  cursor: pointer;
+}
+
+.image-grid-item:only-child {
+  grid-area: 2 span / 2 span;
+}
+
+.image-grid-item:first-child:nth-last-child(3) {
+  grid-area: 2 span;
 }

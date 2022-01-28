@@ -3,6 +3,7 @@ import Icon from "@mdi/react";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import { SRLWrapper } from "simple-react-lightbox";
 import { auth } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addLike, IPost, removeLike } from "../slices/postsSlice";
@@ -10,6 +11,28 @@ import { createLike, deleteLike } from "../slices/userSlice";
 import { timeSince } from "../utils/timeSince";
 
 interface IProps extends IPost {}
+
+const srlOptions = {
+  settings: {
+    disableKeyboardControls: true,
+    disableWheelControls: true,
+    hideControlsAfter: 5000,
+  },
+  buttons: {
+    showAutoplayButton: false,
+    showDownloadButton: true,
+    showFullscreenButton: false,
+    showThumbnailsButton: false,
+    showNextButton: false,
+    showPrevButton: false,
+  },
+  thumbnails: {
+    showThumbnails: false,
+  },
+  caption: {
+    showCaption: false,
+  },
+};
 
 const Post: React.FC<IProps> = (props) => {
   const [user] = useAuthState(auth);
@@ -42,7 +65,7 @@ const Post: React.FC<IProps> = (props) => {
       </figure>
       <div className="media-content">
         <div className="content">
-          <p>
+          <div>
             <strong>{props.name}</strong>{" "}
             <Link to={`/${props.user}`}>
               <small>@{props.user}</small>
@@ -53,17 +76,21 @@ const Post: React.FC<IProps> = (props) => {
             {props.photos.length !== 0 && (
               <>
                 <br />
-                {props.photos.map((photo, i) => (
-                  <img
-                    key={`${i}`}
-                    alt={`Фото ${i}`}
-                    src={photo}
-                    className="round-corners"
-                  />
-                ))}
+                <SRLWrapper options={srlOptions}>
+                  <div className="image-grid">
+                    {props.photos.map((photo, i) => (
+                      <img
+                        key={`${i}`}
+                        alt={`Фото ${i + 1}`}
+                        src={photo}
+                        className="image-grid-item"
+                      />
+                    ))}
+                  </div>
+                </SRLWrapper>
               </>
             )}
-          </p>
+          </div>
         </div>
         <nav className="level is-mobile">
           <div className="level-left">
