@@ -62,7 +62,7 @@ const FeedPage: React.FC<IProps> = () => {
           }
         >
           {postsState.posts.map((post) => (
-            <Post {...post} key={post.id} />
+            <Post {...post} key={post.id} shouldRenderDelete />
           ))}
         </InfiniteScroll>
       </Columns.Column>

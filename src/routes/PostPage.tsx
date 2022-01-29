@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Columns } from "react-bulma-components";
 import { useParams } from "react-router-dom";
+import Comment from "../components/Comment";
 import Post from "../components/Post";
 import { getPost, subscribeToComments } from "../firebase";
 import { useAppSelector } from "../hooks";
@@ -62,10 +64,14 @@ const PostPage: React.FC = () => {
   }
 
   return (
-    <>
-      <Post {...post!} />
-      {comments.length !== 0 && <div>{comments.length}</div>}
-    </>
+    <Columns className="is-centered">
+      <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
+        <Post {...post!} />
+        {comments.map((comment) => (
+          <Comment {...comment} key={comment.id} />
+        ))}
+      </Columns.Column>
+    </Columns>
   );
 };
 

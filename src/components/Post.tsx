@@ -11,7 +11,9 @@ import { timeSince } from "../utils/timeSince";
 import DeletePost from "./DeletePost";
 import SRLAppWrapper from "./SRLAppWrapper";
 
-interface IProps extends IPost {}
+interface IProps extends IPost {
+  shouldRenderDelete?: boolean;
+}
 
 const Post: React.FC<IProps> = (props) => {
   const [user] = useAuthState(auth);
@@ -106,7 +108,9 @@ const Post: React.FC<IProps> = (props) => {
           </div>
         </nav>
       </div>
-      {state.user?.handle === props.user && <DeletePost postId={props.id} />}
+      {props.shouldRenderDelete && state.user?.handle === props.user && (
+        <DeletePost postId={props.id} />
+      )}
     </article>
   );
 };
