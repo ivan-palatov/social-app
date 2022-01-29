@@ -14,13 +14,19 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   getFirestore,
+  limit,
+  onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { IComment } from "./routes/PostPage";
+import { IPost } from "./slices/postsSlice";
 import { IUser } from "./slices/userSlice";
 import { createPhotoName, createPhotosNames } from "./utils/createPhotosNames";
 
@@ -197,4 +203,41 @@ export const deletePost = async (id: string) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const getPost = async (id: string) => {
+  try {
+    const postDoc = await getDoc(doc(db, "posts", id));
+
+    return { id: postDoc.id, ...postDoc.data() } as IPost | undefined;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const subscribeToPosts = (callback: (posts: IPost[]) => void) => {
+  const q = query(
+    collection(db, "posts"),
+    orderBy("createdAt", "desc"),
+    limit(10)
+  );
+
+  return onSnapshot(q, (snapshot) =>
+    callback(
+      snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IPost[]
+    )
+  );
+};
+
+export const subscribeToComments = (
+  id: string,
+  callback: (comments: IComment[]) => void
+) => {
+  const q = query(collection(db, "comments"), where("postId", "==", id));
+
+  return onSnapshot(q, (snapshot) =>
+    callback(
+      snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IComment[]
+    )
+  );
 };

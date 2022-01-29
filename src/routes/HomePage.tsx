@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { auth, logout } from "../firebase";
 import { useAppSelector } from "../hooks";
 
-function Home() {
+function HomePage() {
   const state = useAppSelector((state) => state.user);
   const [user, loading] = useAuthState(auth);
 
@@ -32,4 +32,5 @@ function Home() {
     </div>
   );
 }
-export default Home;
+
+export default HomePage;

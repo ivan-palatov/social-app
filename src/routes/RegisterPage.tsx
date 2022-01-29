@@ -10,7 +10,7 @@ import {
   signInWithGoogle,
 } from "../firebase";
 
-function Register() {
+function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -113,4 +113,4 @@ function Register() {
     </Columns>
   );
 }
-export default Register;
+export default RegisterPage;

@@ -6,7 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, sendPasswordReset } from "../firebase";
 
-function Reset() {
+function ResetPage() {
   const [email, setEmail] = useState("");
 
   const [user, loading] = useAuthState(auth);
@@ -58,4 +58,4 @@ function Reset() {
     </Columns>
   );
 }
-export default Reset;
+export default ResetPage;

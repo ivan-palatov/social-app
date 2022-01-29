@@ -1,27 +1,19 @@
-import {
-  collection,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
 import React, { useEffect } from "react";
 import { Button, Columns } from "react-bulma-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AddPostForm from "../components/AddPostForm";
 import Post from "../components/Post";
-import { db } from "../firebase";
+import { subscribeToPosts } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   fetchMorePosts,
-  IPost,
   setPostsFromLatestSnapshot,
   setPostsFromSnapshot,
 } from "../slices/postsSlice";
 
 interface IProps {}
 
-const Feed: React.FC<IProps> = () => {
+const FeedPage: React.FC<IProps> = () => {
   const [postsState, userState] = useAppSelector((state) => [
     state.posts,
     state.user,
@@ -29,17 +21,8 @@ const Feed: React.FC<IProps> = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const q = query(
-      collection(db, "posts"),
-      orderBy("createdAt", "desc"),
-      limit(10)
-    );
-    const unsubscribe = onSnapshot(q, (snapshot) =>
-      dispatch(
-        setPostsFromSnapshot(
-          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IPost[]
-        )
-      )
+    const unsubscribe = subscribeToPosts((posts) =>
+      dispatch(setPostsFromSnapshot(posts))
     );
 
     return () => unsubscribe();
@@ -87,4 +70,4 @@ const Feed: React.FC<IProps> = () => {
   );
 };
 
-export default Feed;
+export default FeedPage;

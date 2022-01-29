@@ -6,7 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { auth, logInWithEmailAndPassword, signInWithGoogle } from "../firebase";
 
-function Login() {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -95,4 +95,4 @@ function Login() {
     </Columns>
   );
 }
-export default Login;
+export default LoginPage;

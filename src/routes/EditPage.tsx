@@ -11,7 +11,7 @@ import { useAppSelector } from "../hooks";
 
 interface IProps {}
 
-const Edit: React.FC<IProps> = () => {
+const EditPage: React.FC<IProps> = () => {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [website, setWebsite] = useState("");
@@ -190,4 +190,4 @@ const Edit: React.FC<IProps> = () => {
   );
 };
 
-export default Edit;
+export default EditPage;

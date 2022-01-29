@@ -2,7 +2,7 @@ import { mdiComment, mdiHeart, mdiHeartOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addLike, IPost, removeLike } from "../slices/postsSlice";
@@ -17,6 +17,7 @@ const Post: React.FC<IProps> = (props) => {
   const [user] = useAuthState(auth);
   const state = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   async function handleLike() {
     if (!user || !state.user) {
@@ -92,7 +93,10 @@ const Post: React.FC<IProps> = (props) => {
               </span>
             </div>
             <div className="level-item">
-              <span className="icon-text mr-3 is-clickable">
+              <span
+                className="icon-text mr-3 is-clickable"
+                onClick={() => navigate(`../post/${props.id}`)}
+              >
                 <span>{props.comments}</span>
                 <span className="icon">
                   <Icon path={mdiComment} />

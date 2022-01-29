@@ -6,12 +6,13 @@ import SimpleReactLightbox from "simple-react-lightbox";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import Edit from "./routes/Edit";
-import Feed from "./routes/Feed";
-import Home from "./routes/Home";
-import Login from "./routes/Login";
-import Register from "./routes/Register";
-import Reset from "./routes/Reset";
+import EditPage from "./routes/EditPage";
+import FeedPage from "./routes/FeedPage";
+import HomePage from "./routes/HomePage";
+import LoginPage from "./routes/LoginPage";
+import PostPage from "./routes/PostPage";
+import RegisterPage from "./routes/RegisterPage";
+import ResetPage from "./routes/ResetPasswordPage";
 import { store } from "./store";
 
 ReactDOM.render(
@@ -21,12 +22,13 @@ ReactDOM.render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />}>
-              <Route index element={<Home />} />
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              <Route path="reset" element={<Reset />} />
-              <Route path="edit" element={<Edit />} />
-              <Route path="feed" element={<Feed />} />
+              <Route index element={<HomePage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+              <Route path="reset" element={<ResetPage />} />
+              <Route path="edit" element={<EditPage />} />
+              <Route path="feed" element={<FeedPage />} />
+              <Route path="post/:id" element={<PostPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
