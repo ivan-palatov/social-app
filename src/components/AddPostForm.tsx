@@ -7,7 +7,7 @@ import { auth, createPost } from "../firebase";
 import { useAppSelector } from "../hooks";
 import Modal from "./Modal";
 import PhotosDropzone from "./PhotosDropzone";
-import SRLAppWrapper from "./SRLAppWrapper";
+import PhotosPreview from "./PhotosPreview";
 
 interface IProps {}
 
@@ -35,6 +35,7 @@ const AddPostForm: React.FC<IProps> = () => {
     setIsModalOpen(false);
   }, []);
 
+  // Сменит значение только тогда, когда компонент будет удаляться из дерева
   useEffect(
     () => () => {
       componentWillUnmount.current = true;
@@ -43,6 +44,7 @@ const AddPostForm: React.FC<IProps> = () => {
   );
 
   useEffect(() => {
+    // Если компонент не будет удалён из дерева - НЕ убираем созданные objectURLs
     if (!componentWillUnmount.current) {
       return;
     }
@@ -115,23 +117,7 @@ const AddPostForm: React.FC<IProps> = () => {
                   <Icon path={mdiLink} />
                 </span>
               </div>
-              {photos.map((photo) => (
-                <div className="level-item" key={photo.name}>
-                  <SRLAppWrapper>
-                    <figure className="image">
-                      <img
-                        className="image image-item is-48x48"
-                        src={photo.preview}
-                        alt={photo.name}
-                      />
-                      <button
-                        className="delete is-medium top-right"
-                        onClick={() => removePhoto(photo.name)}
-                      ></button>
-                    </figure>
-                  </SRLAppWrapper>
-                </div>
-              ))}
+              <PhotosPreview photos={photos} onRemovePhoto={removePhoto} />
               {loading && (
                 <div className="level-item">
                   <span className="icon">

@@ -95,6 +95,9 @@ export const postsSlice = createSlice({
 
       state.latestSnapshot = payload;
     },
+    removePost: (state, action: PayloadAction<string>) => {
+      state.posts = state.posts.filter((post) => post.id !== action.payload);
+    },
   },
 });
 
@@ -134,5 +137,6 @@ export const {
   setFetchedMore,
   setPostsFromLatestSnapshot,
   setPostsFromSnapshot,
+  removePost,
 } = postsSlice.actions;
 export const postsReducer = postsSlice.reducer;

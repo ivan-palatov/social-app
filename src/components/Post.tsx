@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { addLike, IPost, removeLike } from "../slices/postsSlice";
 import { createLike, deleteLike } from "../slices/userSlice";
 import { timeSince } from "../utils/timeSince";
+import DeletePost from "./DeletePost";
 import SRLAppWrapper from "./SRLAppWrapper";
 
 interface IProps extends IPost {}
@@ -101,6 +102,7 @@ const Post: React.FC<IProps> = (props) => {
           </div>
         </nav>
       </div>
+      {state.user?.handle === props.user && <DeletePost postId={props.id} />}
     </article>
   );
 };

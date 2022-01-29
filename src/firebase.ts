@@ -12,6 +12,8 @@ import {
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   getFirestore,
   query,
@@ -184,6 +186,14 @@ export const createPost = async (body: string, user: IUser, photos: File[]) => {
       comments: 0,
       photos: photosNames.photos,
     });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deletePost = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, "posts", id));
   } catch (error) {
     console.error(error);
   }
