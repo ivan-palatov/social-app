@@ -24,7 +24,7 @@ const DeleteComment: React.FC<IProps> = ({ postId, commentId }) => {
     <>
       <div className="media-right">
         <button
-          className="delete is-medium"
+          className="delete is-small"
           onClick={() => setIsModalActive(true)}
         ></button>
       </div>

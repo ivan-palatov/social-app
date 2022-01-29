@@ -22,7 +22,6 @@ function PostPage() {
   const { id } = useParams();
   const state = useAppSelector((state) => state.posts);
   const [post, setPost] = useState<IPost>();
-  const [notFound, setNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [comments, setComments] = useState<IComment[]>([]);
 
@@ -39,7 +38,7 @@ function PostPage() {
 
       const post = await getPost(id!);
       if (!post) {
-        setNotFound(true);
+        setIsLoading(false);
         return;
       }
 
@@ -56,11 +55,11 @@ function PostPage() {
     return unsubscribe;
   }, [id]);
 
-  if (isLoading || !post) {
+  if (isLoading) {
     return <div>Загрузка...</div>;
   }
 
-  if (notFound) {
+  if (!post) {
     return <div>Такого поста не существует!</div>;
   }
 

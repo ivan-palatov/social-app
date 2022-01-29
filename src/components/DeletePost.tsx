@@ -25,10 +25,10 @@ const DeletePost: React.FC<IProps> = ({ postId }) => {
       return;
     }
 
-    dispatch(removePost(postId));
-
     setIsLoading(false);
     setIsModalActive(false);
+
+    dispatch(removePost(postId));
   }
 
   return (
