@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Columns } from "react-bulma-components";
 import { useParams } from "react-router-dom";
+import AddCommentForm from "../components/AddCommentForm";
 import Comment from "../components/Comment";
 import Post from "../components/Post";
 import { getPost, subscribeToComments } from "../firebase";
@@ -67,6 +68,7 @@ function PostPage() {
     <Columns className="is-centered">
       <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
         <Post {...post!} />
+        <AddCommentForm postId={post.id} />
         {comments.map((comment) => (
           <Comment {...comment} key={comment.id} />
         ))}

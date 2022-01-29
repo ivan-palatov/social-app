@@ -2,8 +2,7 @@ import { mdiLink, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, createPost } from "../firebase";
+import { createPost } from "../firebase";
 import { useAppSelector } from "../hooks";
 import Modal from "./Modal";
 import PhotosDropzone from "./PhotosDropzone";
@@ -14,7 +13,7 @@ interface IProps {}
 const AddPostForm: React.FC<IProps> = () => {
   const state = useAppSelector((state) => state.user);
   const [body, setBody] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [photos, setPhotos] = useState<
     (File & {
@@ -23,8 +22,6 @@ const AddPostForm: React.FC<IProps> = () => {
   >([]);
 
   const componentWillUnmount = useRef(false);
-
-  const [user] = useAuthState(auth);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const files = acceptedFiles.map((file) =>
@@ -52,25 +49,25 @@ const AddPostForm: React.FC<IProps> = () => {
     return () => photos.forEach((photo) => URL.revokeObjectURL(photo.preview));
   }, [photos]);
 
-  async function savePost(e: any) {
-    e.preventDefault();
-    if (!body || !user || !state.user) {
-      return;
-    }
-
-    setLoading(true);
-    await createPost(body, state.user, photos);
-    setPhotos([]);
-    setBody("");
-    setLoading(false);
-  }
-
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setBody(e.target.value);
 
     // Делаем textarea автоматически расширяемой
     e.currentTarget.style.height = "inherit";
     e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+  }
+
+  async function handleSubmitPost(e: any) {
+    e.preventDefault();
+    if (!body || !state.user) {
+      return;
+    }
+
+    setIsLoading(true);
+    await createPost(body, state.user, photos);
+    setPhotos([]);
+    setBody("");
+    setIsLoading(false);
   }
 
   function removePhoto(name: string) {
@@ -85,7 +82,7 @@ const AddPostForm: React.FC<IProps> = () => {
             <img src={state.user?.avatar} alt="Аватар" className="is-rounded" />
           </p>
         </figure>
-        <form className="media-content" noValidate onSubmit={savePost}>
+        <form className="media-content" noValidate onSubmit={handleSubmitPost}>
           <div className="field">
             <div className="control">
               <textarea
@@ -104,7 +101,7 @@ const AddPostForm: React.FC<IProps> = () => {
                 <Button
                   className="is-success"
                   style={{ margin: "10px 0" }}
-                  disabled={loading}
+                  disabled={isLoading}
                 >
                   Опубликовать
                 </Button>
@@ -118,7 +115,7 @@ const AddPostForm: React.FC<IProps> = () => {
                 </span>
               </div>
               <PhotosPreview photos={photos} onRemovePhoto={removePhoto} />
-              {loading && (
+              {isLoading && (
                 <div className="level-item">
                   <span className="icon">
                     <Icon path={mdiLoading} spin />

@@ -17,6 +17,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  increment,
   limit,
   onSnapshot,
   orderBy,
@@ -215,6 +216,27 @@ export const getPost = async (id: string) => {
   }
 };
 
+export const createComment = async (
+  postId: string,
+  body: string,
+  user: IUser
+) => {
+  try {
+    await addDoc(collection(db, "comments"), {
+      createdAt: new Date().toISOString(),
+      body,
+      user: user.handle,
+      name: user.name,
+      avatar: user.avatar,
+      postId,
+    });
+
+    await updateDoc(doc(db, "posts", postId), { comments: increment(1) });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const subscribeToPosts = (callback: (posts: IPost[]) => void) => {
   const q = query(
     collection(db, "posts"),
@@ -233,7 +255,11 @@ export const subscribeToComments = (
   id: string,
   callback: (comments: IComment[]) => void
 ) => {
-  const q = query(collection(db, "comments"), where("postId", "==", id));
+  const q = query(
+    collection(db, "comments"),
+    where("postId", "==", id),
+    orderBy("createdAt", "desc")
+  );
 
   return onSnapshot(q, (snapshot) =>
     callback(
