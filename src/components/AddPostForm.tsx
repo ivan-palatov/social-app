@@ -1,12 +1,13 @@
-import { mdiImage, mdiLink, mdiLoading, mdiUpload } from "@mdi/js";
+import { mdiLink, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
-import { useDropzone } from "react-dropzone";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, createPost } from "../firebase";
 import { useAppSelector } from "../hooks";
 import Modal from "./Modal";
+import PhotosDropzone from "./PhotosDropzone";
+import SRLAppWrapper from "./SRLAppWrapper";
 
 interface IProps {}
 
@@ -15,22 +16,39 @@ const AddPostForm: React.FC<IProps> = () => {
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [photos, setPhotos] = useState<File[]>([]);
+  const [photos, setPhotos] = useState<
+    (File & {
+      preview: string;
+    })[]
+  >([]);
+
+  const componentWillUnmount = useRef(false);
+
+  const [user] = useAuthState(auth);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setPhotos(acceptedFiles);
+    const files = acceptedFiles.map((file) =>
+      Object.assign(file, { preview: URL.createObjectURL(file) })
+    );
+
+    setPhotos(files);
     setIsModalOpen(false);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: "image/*",
-    maxFiles: 4,
-    maxSize: 5 * 1024 * 1024,
-    multiple: true,
-  });
+  useEffect(
+    () => () => {
+      componentWillUnmount.current = true;
+    },
+    []
+  );
 
-  const [user] = useAuthState(auth);
+  useEffect(() => {
+    if (!componentWillUnmount.current) {
+      return;
+    }
+
+    return () => photos.forEach((photo) => URL.revokeObjectURL(photo.preview));
+  }, [photos]);
 
   async function savePost(e: any) {
     e.preventDefault();
@@ -51,6 +69,10 @@ const AddPostForm: React.FC<IProps> = () => {
     // Делаем textarea автоматически расширяемой
     e.currentTarget.style.height = "inherit";
     e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+  }
+
+  function removePhoto(name: string) {
+    setPhotos((photos) => photos.filter((photo) => photo.name !== name));
   }
 
   return (
@@ -93,14 +115,23 @@ const AddPostForm: React.FC<IProps> = () => {
                   <Icon path={mdiLink} />
                 </span>
               </div>
-              {photos.length !== 0 && (
-                <div className="level-item">
-                  <span className="icon is-medium">
-                    <span>{photos.length} </span>
-                    <Icon path={mdiImage} />
-                  </span>
+              {photos.map((photo) => (
+                <div className="level-item" key={photo.name}>
+                  <SRLAppWrapper>
+                    <figure className="image">
+                      <img
+                        className="image image-item is-48x48"
+                        src={photo.preview}
+                        alt={photo.name}
+                      />
+                      <button
+                        className="delete is-medium top-right"
+                        onClick={() => removePhoto(photo.name)}
+                      ></button>
+                    </figure>
+                  </SRLAppWrapper>
                 </div>
-              )}
+              ))}
               {loading && (
                 <div className="level-item">
                   <span className="icon">
@@ -117,19 +148,7 @@ const AddPostForm: React.FC<IProps> = () => {
         isActive={isModalOpen}
         onClickOutside={() => setIsModalOpen(false)}
       >
-        <div className="file is-large is-boxed is-centered" {...getRootProps()}>
-          <label className="file-label">
-            <input className="file-input" {...getInputProps()} />
-            <span className="file-cta">
-              <span className="file-icon">
-                <Icon path={mdiUpload} />
-              </span>
-              <span className="file-label">
-                {isDragActive ? "Положите фото сюда" : "Переместите фото сюда"}
-              </span>
-            </span>
-          </label>
-        </div>
+        <PhotosDropzone onDrop={onDrop} />
       </Modal>
     </>
   );

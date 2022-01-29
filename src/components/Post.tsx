@@ -3,35 +3,14 @@ import Icon from "@mdi/react";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { SRLWrapper } from "simple-react-lightbox";
 import { auth } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addLike, IPost, removeLike } from "../slices/postsSlice";
 import { createLike, deleteLike } from "../slices/userSlice";
 import { timeSince } from "../utils/timeSince";
+import SRLAppWrapper from "./SRLAppWrapper";
 
 interface IProps extends IPost {}
-
-const srlOptions = {
-  settings: {
-    disableKeyboardControls: true,
-    disableWheelControls: true,
-  },
-  buttons: {
-    showAutoplayButton: false,
-    showDownloadButton: true,
-    showFullscreenButton: false,
-    showThumbnailsButton: false,
-    showNextButton: false,
-    showPrevButton: false,
-  },
-  thumbnails: {
-    showThumbnails: false,
-  },
-  caption: {
-    showCaption: false,
-  },
-};
 
 const Post: React.FC<IProps> = (props) => {
   const [user] = useAuthState(auth);
@@ -75,7 +54,7 @@ const Post: React.FC<IProps> = (props) => {
             {props.photos.length !== 0 && (
               <>
                 <br />
-                <SRLWrapper options={srlOptions}>
+                <SRLAppWrapper>
                   <div className="image-grid">
                     {props.photos.map((photo, i) => (
                       <img
@@ -86,7 +65,7 @@ const Post: React.FC<IProps> = (props) => {
                       />
                     ))}
                   </div>
-                </SRLWrapper>
+                </SRLAppWrapper>
               </>
             )}
           </div>

@@ -37,3 +37,15 @@ code {
 .image-grid-item:first-child:nth-last-child(3) {
   grid-area: 2 span;
 }
+
+.image-item {
+  border-radius: 3px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

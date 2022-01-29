@@ -61,8 +61,16 @@ const Edit: React.FC<IProps> = () => {
   }
 
   function saveNewAvatar() {
-    setWaiting(true);
     const canvas = editor.getImage() as HTMLCanvasElement;
+
+    canvas.toBlob(saveFromBlob);
+  }
+
+  async function saveFromBlob(blob: Blob | null) {
+    if (!blob) {
+      return;
+    }
+
     let name = "";
 
     if (typeof avatar === "string") {
@@ -71,17 +79,7 @@ const Edit: React.FC<IProps> = () => {
       name = avatar.name;
     }
 
-    canvas.toBlob(saveFromBlob);
-
-    setWaiting(false);
-  }
-
-  async function saveFromBlob(blob: Blob | null) {
-    if (!blob) {
-      return;
-    }
-
-    const file = new File([blob!], name, { type: blob!.type });
+    const file = new File([blob], name, { type: blob.type });
     setWaiting(true);
     await updateAvatar(file, state.user!);
     setWaiting(false);
