@@ -5,8 +5,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { addLike, IPost, removeLike } from "../slices/postsSlice";
+import { addLike, removeLike } from "../slices/postsSlice";
 import { createLike, deleteLike } from "../slices/userSlice";
+import { IPost } from "../utils/interfaces";
 import { timeSince } from "../utils/timeSince";
 import DeletePost from "./DeletePost";
 import SRLAppWrapper from "./SRLAppWrapper";
@@ -20,6 +21,10 @@ const Post: React.FC<IProps> = (props) => {
   const state = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  function navigateToPost() {
+    navigate(`/post/${props.id}`);
+  }
 
   async function handleLike() {
     if (!user || !state.user) {
@@ -54,10 +59,11 @@ const Post: React.FC<IProps> = (props) => {
             </Link>{" "}
             <small>{timeSince(props.createdAt)}</small>
             <br />
-            {props.body}
+            <p onClick={navigateToPost} className="is-clickable">
+              {props.body}
+            </p>
             {props.photos.length !== 0 && (
               <>
-                <br />
                 <SRLAppWrapper>
                   <div className="image-grid">
                     {props.photos.map((photo, i) => (
@@ -97,7 +103,7 @@ const Post: React.FC<IProps> = (props) => {
             <div className="level-item">
               <span
                 className="icon-text mr-3 is-clickable"
-                onClick={() => navigate(`../post/${props.id}`)}
+                onClick={navigateToPost}
               >
                 <span>{props.comments}</span>
                 <span className="icon">

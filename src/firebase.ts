@@ -26,10 +26,9 @@ import {
   where,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { IComment } from "./routes/PostPage";
-import { IPost } from "./slices/postsSlice";
 import { IUser } from "./slices/userSlice";
 import { createPhotoName, createPhotosNames } from "./utils/createPhotosNames";
+import { IComment, IPost } from "./utils/interfaces";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDb_NC7rr_2rMEpvLjXnO2wWLR7wX3V7u0",

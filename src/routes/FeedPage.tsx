@@ -49,7 +49,7 @@ function FeedPage() {
           next={() => dispatch(fetchMorePosts(postsState.lastCreatedAt))}
           hasMore={postsState.hasMore}
           loader={
-            <progress className="progress is-small is-primary" max="100">
+            <progress className="progress is-small is-success" max="100">
               15%
             </progress>
           }

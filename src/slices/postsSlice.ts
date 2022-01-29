@@ -9,18 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { AppDispatch } from "../store";
-
-export interface IPost {
-  id: string;
-  body: string;
-  createdAt: string;
-  likes: number;
-  comments: number;
-  user: string;
-  name: string;
-  avatar: string;
-  photos: string[];
-}
+import { IPost } from "../utils/interfaces";
 
 interface IPostsState {
   posts: IPost[];
