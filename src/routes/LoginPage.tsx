@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { auth, logInWithEmailAndPassword, signInWithGoogle } from "../firebase";
+import { auth } from "../firebase/firebase";
+import { UserHandler } from "../firebase/UserHandler";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,17 +21,15 @@ function LoginPage() {
     if (user) window.location.assign("/");
   }, [user, loading]);
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    UserHandler.logInWithEmailAndPassword(email, password);
+  }
+
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
-        <form
-          className="box"
-          noValidate
-          onSubmit={(e) => {
-            e.preventDefault();
-            logInWithEmailAndPassword(email, password);
-          }}
-        >
+        <form className="box" noValidate onSubmit={handleSubmit}>
           <div className="field">
             <label htmlFor="email" className="label">
               Email
@@ -80,7 +79,7 @@ function LoginPage() {
           }}
         >
           <div style={{ marginRight: 10 }}>Войти с помощью </div>
-          <Button onClick={signInWithGoogle}>
+          <Button onClick={UserHandler.signInWithGoogle}>
             <span className="icon">
               <Icon path={mdiGoogle} />
             </span>

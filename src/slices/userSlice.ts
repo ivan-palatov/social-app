@@ -1,31 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  increment,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import { db } from "../firebase";
+import { LikeHandler } from "../firebase/LikeHandler";
+import { UserHandler } from "../firebase/UserHandler";
 import { AppDispatch } from "../store";
-
-export interface IUser {
-  id: string;
-  uid: string;
-  authProvider: string;
-  avatar: string;
-  bio: string;
-  createdAt: string;
-  email: string;
-  handle: string;
-  name: string;
-  website: string;
-  likes: string[];
-}
+import { IUser } from "../utils/interfaces";
 
 interface IUserState {
   user?: IUser;
@@ -40,7 +17,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUser>) => {
+    setUser: (state, action: PayloadAction<IUser | undefined>) => {
       state.user = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -56,44 +33,26 @@ export const userSlice = createSlice({
 });
 
 export const fetchUserData = (uid: string) => async (dispatch: AppDispatch) => {
-  const q = query(collection(db, "users"), where("uid", "==", uid));
-  const doc = await getDocs(q);
-  const data = doc.docs[0].data();
-  const likesDocs = await getDocs(
-    query(collection(db, "likes"), where("userHandle", "==", data.handle))
-  );
+  const user = await UserHandler.getUserData(uid);
 
-  dispatch(
-    setUser({
-      ...data,
-      id: doc.docs[0].id,
-      likes: likesDocs.docs.map((d) => d.data().storyId) as any[],
-    } as IUser)
-  );
   dispatch(setLoading(false));
+  if (!user) {
+    return;
+  }
+
+  dispatch(setUser(user));
 };
 
 export const createLike =
-  (id: string, userHandle: string) => async (dispatch: AppDispatch) => {
-    dispatch(addLike(id));
-    // Добавляем лайк в бд
-    await addDoc(collection(db, "likes"), { userHandle, storyId: id });
-    await updateDoc(doc(db, "posts", id), { likes: increment(1) });
+  (storyId: string, userHandle: string) => async (dispatch: AppDispatch) => {
+    dispatch(addLike(storyId));
+    await LikeHandler.addLike(storyId, userHandle);
   };
 
 export const deleteLike =
-  (id: string, userHandle: string) => async (dispatch: AppDispatch) => {
-    dispatch(removeLike(id));
-    // Удаляем лайк из бд
-    const data = await getDocs(
-      query(
-        collection(db, "likes"),
-        where("storyId", "==", id),
-        where("userHandle", "==", userHandle)
-      )
-    );
-    await deleteDoc(doc(db, "likes", data.docs[0].id));
-    await updateDoc(doc(db, "posts", id), { likes: increment(-1) });
+  (storyId: string, userHandle: string) => async (dispatch: AppDispatch) => {
+    dispatch(removeLike(storyId));
+    await LikeHandler.removeLike(storyId, userHandle);
   };
 
 export const { setUser, setLoading, addLike, removeLike } = userSlice.actions;

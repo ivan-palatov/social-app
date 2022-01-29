@@ -3,7 +3,7 @@ import { Button, Columns } from "react-bulma-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AddPostForm from "../components/AddPostForm";
 import Post from "../components/Post";
-import { subscribeToPosts } from "../firebase";
+import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   fetchMorePosts,
@@ -19,7 +19,7 @@ function FeedPage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const unsubscribe = subscribeToPosts((posts) =>
+    const unsubscribe = PostHandler.subscribeToPosts((posts) =>
       dispatch(setPostsFromSnapshot(posts))
     );
 

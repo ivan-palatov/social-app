@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, sendPasswordReset } from "../firebase";
+import { auth } from "../firebase/firebase";
+import { UserHandler } from "../firebase/UserHandler";
 
 function ResetPage() {
   const [email, setEmail] = useState("");
@@ -20,17 +21,15 @@ function ResetPage() {
     if (user) navigate("/");
   }, [user, loading, navigate]);
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    UserHandler.sendPasswordReset(email);
+  }
+
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
-        <form
-          className="box"
-          noValidate
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendPasswordReset(email);
-          }}
-        >
+        <form className="box" noValidate onSubmit={handleSubmit}>
           <div className="field">
             <label htmlFor="email" className="label">
               Email

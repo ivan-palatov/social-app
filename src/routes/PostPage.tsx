@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import AddCommentForm from "../components/AddCommentForm";
 import Comments from "../components/Comments";
 import Post from "../components/Post";
-import { getPost } from "../firebase";
+import { PostHandler } from "../firebase/PostHandler";
 import { useAppSelector } from "../hooks";
 import { IPost } from "../utils/interfaces";
 
@@ -25,7 +25,7 @@ function PostPage() {
         return;
       }
 
-      const post = await getPost(id!);
+      const post = await PostHandler.getPost(id!);
       if (!post) {
         setIsLoading(false);
         return;

@@ -2,7 +2,7 @@ import { mdiLink, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
-import { createPost } from "../firebase";
+import { PostHandler } from "../firebase/PostHandler";
 import { useAppSelector } from "../hooks";
 import Modal from "./Modal";
 import PhotosDropzone from "./PhotosDropzone";
@@ -64,7 +64,7 @@ const AddPostForm: React.FC<IProps> = () => {
     }
 
     setIsLoading(true);
-    await createPost(body, state.user, photos);
+    await PostHandler.addPost(body, state.user, photos);
     setPhotos([]);
     setBody("");
     setIsLoading(false);

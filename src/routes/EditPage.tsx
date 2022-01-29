@@ -6,7 +6,8 @@ import { Button, Columns } from "react-bulma-components";
 import { useDropzone } from "react-dropzone";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import { auth, updateAvatar, updateProfile } from "../firebase";
+import { auth } from "../firebase/firebase";
+import { UserHandler } from "../firebase/UserHandler";
 import { useAppSelector } from "../hooks";
 
 function EditPage() {
@@ -54,7 +55,7 @@ function EditPage() {
   async function saveChanges(e: any) {
     e.preventDefault();
     setForm((state) => ({ ...state, isLoading: true }));
-    await updateProfile(form.name, form.bio, form.website, user!);
+    await UserHandler.updateProfile(form.name, form.bio, form.website, user!);
     setForm((state) => ({ ...state, isLoading: false }));
   }
 
@@ -79,7 +80,7 @@ function EditPage() {
 
     const file = new File([blob], name, { type: blob.type });
     setForm((state) => ({ ...state, isLoading: true }));
-    await updateAvatar(file, userState.user!);
+    await UserHandler.updateAvatar(file, userState.user!);
     setForm((state) => ({ ...state, isLoading: false }));
   }
 

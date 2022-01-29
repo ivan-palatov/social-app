@@ -2,7 +2,7 @@ import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
-import { deletePost } from "../firebase";
+import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { removePost } from "../slices/postsSlice";
 import Modal from "./Modal";
@@ -20,7 +20,7 @@ const DeletePost: React.FC<IProps> = ({ postId }) => {
   async function handleDeletePost() {
     setIsLoading(true);
 
-    await deletePost(postId);
+    await PostHandler.deletePost(postId);
     if (!state.fetchedMore) {
       return;
     }

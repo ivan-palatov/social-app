@@ -2,12 +2,20 @@ import React from "react";
 import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { auth, logout } from "../firebase";
-import { useAppSelector } from "../hooks";
+import { auth } from "../firebase/firebase";
+import { UserHandler } from "../firebase/UserHandler";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setUser } from "../slices/userSlice";
 
 function HomePage() {
   const state = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const [user, loading] = useAuthState(auth);
+
+  function logout() {
+    UserHandler.logout();
+    dispatch(setUser(undefined));
+  }
 
   if (loading || state.loading) {
     return <div>Загрузка...</div>;

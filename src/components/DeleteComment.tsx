@@ -2,7 +2,7 @@ import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
-import { deleteComment } from "../firebase";
+import { CommentHandler } from "../firebase/CommentHandler";
 import Modal from "./Modal";
 
 interface IProps {
@@ -17,7 +17,7 @@ const DeleteComment: React.FC<IProps> = ({ postId, commentId }) => {
   async function handleDeleteComment() {
     setIsLoading(true);
 
-    await deleteComment(postId, commentId);
+    await CommentHandler.deleteComment(postId, commentId);
   }
 
   return (

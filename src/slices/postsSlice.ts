@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-} from "firebase/firestore";
-import { db } from "../firebase";
+import { PostHandler } from "../firebase/PostHandler";
 import { AppDispatch } from "../store";
 import { IPost } from "../utils/interfaces";
 
@@ -92,28 +84,16 @@ export const postsSlice = createSlice({
 
 export const fetchMorePosts =
   (lastCreatedAt: string) => async (dispatch: AppDispatch) => {
-    const q = query(
-      collection(db, "posts"),
-      orderBy("createdAt", "desc"),
-      startAfter(lastCreatedAt),
-      limit(10)
-    );
-    const docs = await getDocs(q);
+    const posts = await PostHandler.getMorePosts(lastCreatedAt);
 
-    if (docs.size === 0) {
+    if (!posts || posts.length === 0) {
       dispatch(setHasMore(false));
       return;
     }
+
     dispatch(setFetchedMore(true));
-    dispatch(setLastCreatedAt(docs.docs[docs.size - 1].data().createdAt));
-    dispatch(
-      addPosts(
-        docs.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        })) as IPost[]
-      )
-    );
+    dispatch(setLastCreatedAt(posts[posts.length - 1].createdAt));
+    dispatch(addPosts(posts));
   };
 
 export const {

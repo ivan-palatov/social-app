@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscribeToComments } from "../firebase";
+import { CommentHandler } from "../firebase/CommentHandler";
 import { IComment } from "../utils/interfaces";
 import Comment from "./Comment";
 
@@ -13,12 +13,15 @@ const Comments: React.FC<IProps> = ({ postId }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    const unsubscribe = subscribeToComments(postId, (snapshot) => {
-      setIsLoading(false);
-      setComments(snapshot);
-    });
+    const unsubscribe = CommentHandler.subscribeToComments(
+      postId,
+      (snapshot) => {
+        setIsLoading(false);
+        setComments(snapshot);
+      }
+    );
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, [postId]);
 
   if (isLoading) {

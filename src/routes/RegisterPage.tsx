@@ -4,11 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import {
-  auth,
-  registerWithEmailAndPassword,
-  signInWithGoogle,
-} from "../firebase";
+import { auth } from "../firebase/firebase";
+import { UserHandler } from "../firebase/UserHandler";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -20,7 +17,7 @@ function RegisterPage() {
   const register = (e: any) => {
     // TODO: validate inputs
     e.preventDefault();
-    registerWithEmailAndPassword(name, email, password);
+    UserHandler.registerWithEmailAndPassword(name, email, password);
   };
 
   useEffect(() => {
@@ -103,7 +100,7 @@ function RegisterPage() {
           }}
         >
           <div style={{ marginRight: 10 }}>Зарегистрироваться с помощью </div>
-          <Button onClick={signInWithGoogle}>
+          <Button onClick={UserHandler.signInWithGoogle}>
             <span className="icon">
               <Icon path={mdiGoogle} />
             </span>

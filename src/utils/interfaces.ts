@@ -19,3 +19,17 @@ export interface IPost {
   avatar: string;
   photos: string[];
 }
+
+export interface IUser {
+  id: string;
+  uid: string;
+  authProvider: string;
+  avatar: string;
+  bio: string;
+  createdAt: string;
+  email: string;
+  handle: string;
+  name: string;
+  website: string;
+  likes: string[];
+}

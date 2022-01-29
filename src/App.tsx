@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Navbar } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, Outlet } from "react-router-dom";
-import { auth } from "./firebase";
+import { auth } from "./firebase/firebase";
 import { useAppDispatch } from "./hooks";
 import { fetchUserData } from "./slices/userSlice";
 
