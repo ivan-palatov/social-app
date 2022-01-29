@@ -13,7 +13,10 @@ function ResetPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
+
     if (user) navigate("/");
   }, [user, loading, navigate]);
 

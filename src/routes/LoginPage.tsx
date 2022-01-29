@@ -16,6 +16,7 @@ function LoginPage() {
     if (loading) {
       return;
     }
+
     if (user) window.location.assign("/");
   }, [user, loading]);
 

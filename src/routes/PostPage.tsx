@@ -17,7 +17,7 @@ export interface IComment {
   avatar: string;
 }
 
-const PostPage: React.FC = () => {
+function PostPage() {
   const { id } = useParams();
   const state = useAppSelector((state) => state.posts);
   const [post, setPost] = useState<IPost>();
@@ -73,6 +73,6 @@ const PostPage: React.FC = () => {
       </Columns.Column>
     </Columns>
   );
-};
+}
 
 export default PostPage;

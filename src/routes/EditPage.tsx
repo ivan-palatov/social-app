@@ -9,20 +9,23 @@ import { useNavigate } from "react-router-dom";
 import { auth, updateAvatar, updateProfile } from "../firebase";
 import { useAppSelector } from "../hooks";
 
-interface IProps {}
+function EditPage() {
+  const [form, setForm] = useState({
+    name: "",
+    bio: "",
+    website: "",
+    avatar: "" as string | File,
+    isLoading: false,
+    avatarEditorScale: 13,
+    editor: null as any,
+  });
+  const userState = useAppSelector((state) => state.user);
 
-const EditPage: React.FC<IProps> = () => {
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
-  const [website, setWebsite] = useState("");
-  const [avatar, setAvatar] = useState<string | File>("");
-  const [waiting, setWaiting] = useState(false);
-  const [avatarEditorScale, setAvatarEditorScale] = useState(13);
-  const state = useAppSelector((state) => state.user);
-  const [editor, setEditor] = useState<any>(null);
+  const [user, loading] = useAuthState(auth);
+  const navigate = useNavigate();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setAvatar(acceptedFiles[0]);
+    setForm((state) => ({ ...state, avatar: acceptedFiles[0] }));
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -33,9 +36,6 @@ const EditPage: React.FC<IProps> = () => {
     accept: "image/*",
   });
 
-  const [user, loading] = useAuthState(auth);
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (loading) {
       return;
@@ -43,25 +43,23 @@ const EditPage: React.FC<IProps> = () => {
     if (!user) {
       return navigate("/login");
     }
-    if (!state.user) {
+    if (!userState.user) {
       return;
     }
 
-    setName(state.user.name);
-    setBio(state.user.bio);
-    setAvatar(state.user.avatar);
-    setWebsite(state.user.website);
-  }, [user, loading, state, navigate]);
+    const { name, bio, avatar, website } = userState.user;
+    setForm((state) => ({ ...state, name, bio, avatar, website }));
+  }, [user, loading, userState, navigate]);
 
   async function saveChanges(e: any) {
     e.preventDefault();
-    setWaiting(true);
-    await updateProfile(name, bio, website, user!);
-    setWaiting(false);
+    setForm((state) => ({ ...state, isLoading: true }));
+    await updateProfile(form.name, form.bio, form.website, user!);
+    setForm((state) => ({ ...state, isLoading: false }));
   }
 
   function saveNewAvatar() {
-    const canvas = editor.getImage() as HTMLCanvasElement;
+    const canvas = form.editor.getImage() as HTMLCanvasElement;
 
     canvas.toBlob(saveFromBlob);
   }
@@ -73,19 +71,20 @@ const EditPage: React.FC<IProps> = () => {
 
     let name = "";
 
-    if (typeof avatar === "string") {
-      name = avatar;
+    if (typeof form.avatar === "string") {
+      name = form.avatar;
     } else {
-      name = avatar.name;
+      name = form.avatar.name;
     }
 
     const file = new File([blob], name, { type: blob.type });
-    setWaiting(true);
-    await updateAvatar(file, state.user!);
-    setWaiting(false);
+    setForm((state) => ({ ...state, isLoading: true }));
+    await updateAvatar(file, userState.user!);
+    setForm((state) => ({ ...state, isLoading: false }));
   }
 
-  const setEditorRef = (e: any) => setEditor(e);
+  const setEditorRef = (editor: any) =>
+    setForm((state) => ({ ...state, editor }));
 
   return (
     <Columns className="is-centered">
@@ -98,12 +97,12 @@ const EditPage: React.FC<IProps> = () => {
           <div {...getRootProps()}>
             <AvatarEditor
               ref={setEditorRef}
-              image={avatar}
+              image={form.avatar}
               borderRadius={5000}
               height={256}
               width={256}
               border={10}
-              scale={avatarEditorScale / 10}
+              scale={form.avatarEditorScale / 10}
             />
             <input {...getInputProps()} />
             <br />
@@ -115,15 +114,20 @@ const EditPage: React.FC<IProps> = () => {
             min={10}
             max={40}
             step={1}
-            value={avatarEditorScale}
-            onChange={(e) => setAvatarEditorScale(parseInt(e.target.value))}
+            value={form.avatarEditorScale}
+            onChange={(e) =>
+              setForm((state) => ({
+                ...state,
+                avatarEditorScale: parseInt(e.target.value),
+              }))
+            }
             style={{ width: "100%" }}
           />
           <Button
             className="is-success mb-5 mt-3"
             style={{ width: "100%" }}
             onClick={saveNewAvatar}
-            disabled={waiting}
+            disabled={form.isLoading}
           >
             Сохранить аватар
           </Button>
@@ -134,8 +138,10 @@ const EditPage: React.FC<IProps> = () => {
             <div className="control has-icons-left">
               <input
                 id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={form.name}
+                onChange={(e) =>
+                  setForm((state) => ({ ...state, name: e.target.value }))
+                }
                 type="text"
                 placeholder="Иванов Иван"
                 className="input"
@@ -152,8 +158,10 @@ const EditPage: React.FC<IProps> = () => {
             <div className="control has-icons-left">
               <input
                 id="website"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
+                value={form.website}
+                onChange={(e) =>
+                  setForm((state) => ({ ...state, website: e.target.value }))
+                }
                 type="url"
                 placeholder="https://google.com"
                 className="input"
@@ -170,8 +178,10 @@ const EditPage: React.FC<IProps> = () => {
             <div className="control">
               <textarea
                 id="bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
+                value={form.bio}
+                onChange={(e) =>
+                  setForm((state) => ({ ...state, bio: e.target.value }))
+                }
                 className="textarea"
               />
             </div>
@@ -179,7 +189,7 @@ const EditPage: React.FC<IProps> = () => {
           <Button
             className="is-success"
             type="submit"
-            disabled={waiting}
+            disabled={form.isLoading}
             style={{ width: "100%" }}
           >
             Сохранить
@@ -188,6 +198,6 @@ const EditPage: React.FC<IProps> = () => {
       </Columns.Column>
     </Columns>
   );
-};
+}
 
 export default EditPage;

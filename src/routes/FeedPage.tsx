@@ -11,9 +11,7 @@ import {
   setPostsFromSnapshot,
 } from "../slices/postsSlice";
 
-interface IProps {}
-
-const FeedPage: React.FC<IProps> = () => {
+function FeedPage() {
   const [postsState, userState] = useAppSelector((state) => [
     state.posts,
     state.user,
@@ -68,6 +66,6 @@ const FeedPage: React.FC<IProps> = () => {
       </Columns.Column>
     </Columns>
   );
-};
+}
 
 export default FeedPage;

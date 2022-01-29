@@ -24,7 +24,10 @@ function RegisterPage() {
   };
 
   useEffect(() => {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
+
     if (user) window.location.assign("/edit");
   }, [user, loading]);
 
