@@ -237,6 +237,15 @@ export const createComment = async (
   }
 };
 
+export const deleteComment = async (postId: string, commentId: string) => {
+  try {
+    await deleteDoc(doc(db, "comments", commentId));
+    await updateDoc(doc(db, "posts", postId), { comments: increment(-1) });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const subscribeToPosts = (callback: (posts: IPost[]) => void) => {
   const q = query(
     collection(db, "posts"),
