@@ -2,16 +2,16 @@ import React from "react";
 import SRLAppWrapper from "./SRLAppWrapper";
 
 interface IProps {
-  photos: (File & {
+  images: (File & {
     preview: string;
   })[];
   onRemovePhoto: (name: string) => void;
 }
 
-const PhotosPreview: React.FC<IProps> = ({ photos, onRemovePhoto }) => {
+const ImagesPreview: React.FC<IProps> = ({ images, onRemovePhoto }) => {
   return (
     <>
-      {photos.map((photo) => (
+      {images.map((photo) => (
         <div className="level-item" key={photo.name}>
           <SRLAppWrapper>
             <figure className="image">
@@ -32,4 +32,4 @@ const PhotosPreview: React.FC<IProps> = ({ photos, onRemovePhoto }) => {
   );
 };
 
-export default PhotosPreview;
+export default ImagesPreview;

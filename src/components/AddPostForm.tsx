@@ -4,9 +4,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppSelector } from "../hooks";
+import ImagesDropzone from "./ImagesDropzone";
+import ImagesPreview from "./ImagesPreview";
 import Modal from "./Modal";
-import PhotosDropzone from "./PhotosDropzone";
-import PhotosPreview from "./PhotosPreview";
 
 interface IProps {}
 
@@ -114,7 +114,7 @@ const AddPostForm: React.FC<IProps> = () => {
                   <Icon path={mdiLink} />
                 </span>
               </div>
-              <PhotosPreview photos={photos} onRemovePhoto={removePhoto} />
+              <ImagesPreview images={photos} onRemovePhoto={removePhoto} />
               {isLoading && (
                 <div className="level-item">
                   <span className="icon">
@@ -131,7 +131,7 @@ const AddPostForm: React.FC<IProps> = () => {
         isActive={isModalOpen}
         onClickOutside={() => setIsModalOpen(false)}
       >
-        <PhotosDropzone onDrop={onDrop} />
+        <ImagesDropzone onDrop={onDrop} />
       </Modal>
     </>
   );

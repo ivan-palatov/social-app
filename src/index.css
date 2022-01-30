@@ -49,3 +49,37 @@ code {
   top: 0;
   right: 0;
 }
+
+.is-hoverable {
+  position: relative;
+  display: inline-block;
+}
+
+.is-hoverable-info {
+  display: none;
+  color: #fff;
+  left: 0;
+  top: 45%;
+  right: 0;
+  border-radius: 50%;
+  text-align: center;
+  position: absolute;
+  cursor: pointer;
+}
+
+.is-hoverable:hover > .is-hoverable-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 99.5%;
+  left: 0;
+  background-color: #000;
+  border-radius: 50%;
+  opacity: 0.5;
+  display: block;
+  cursor: pointer;
+}
+
+.is-hoverable:hover .is-hoverable-info {
+  display: block;
+}

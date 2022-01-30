@@ -7,7 +7,7 @@ interface IProps {
   onDrop: (acceptedFiles: File[]) => void;
 }
 
-const PhotosDropzone: React.FC<IProps> = ({ onDrop }) => {
+const ImagesDropzone: React.FC<IProps> = ({ onDrop }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: "image/*",
@@ -39,4 +39,4 @@ const PhotosDropzone: React.FC<IProps> = ({ onDrop }) => {
   );
 };
 
-export default PhotosDropzone;
+export default ImagesDropzone;

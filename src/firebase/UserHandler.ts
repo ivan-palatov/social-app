@@ -25,6 +25,26 @@ import {
 } from "./firebase";
 
 export class UserHandler {
+  static defaultAvatar = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`;
+
+  private static async addUser(
+    user: User,
+    name: string,
+    authProvider: "google" | "local"
+  ) {
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      name,
+      authProvider,
+      email: user.email,
+      handle: user.email?.substring(0, user.email?.indexOf("@")),
+      createdAt: new Date().toISOString(),
+      bio: "",
+      website: "",
+      avatar: UserHandler.defaultAvatar,
+    });
+  }
+
   static async signInWithGoogle() {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
@@ -37,25 +57,11 @@ export class UserHandler {
       }
 
       // Если ещё нет в базе - создаём
-      await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
-        handle: user.email?.substring(0, user.email?.indexOf("@")),
-        createdAt: new Date().toISOString(),
-        bio: "",
-        website: "",
-        avatar: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  static async logInWithEmailAndPassword(email: string, password: string) {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await UserHandler.addUser(
+        user,
+        user.displayName || "Пользователь",
+        "google"
+      );
     } catch (err) {
       console.error(err);
     }
@@ -73,17 +79,15 @@ export class UserHandler {
         password
       );
 
-      await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name,
-        authProvider: "local",
-        email,
-        handle: email.substring(0, email.indexOf("@")),
-        createdAt: new Date().toISOString(),
-        bio: "",
-        website: "",
-        avatar: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`,
-      });
+      await UserHandler.addUser(user, name, "local");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  static async logInWithEmailAndPassword(email: string, password: string) {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
       console.error(err);
     }

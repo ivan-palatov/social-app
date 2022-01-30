@@ -1,11 +1,10 @@
 import { mdiFaceMan, mdiWeb } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useEffect, useState } from "react";
-import AvatarEditor from "react-avatar-editor";
 import { Button, Columns } from "react-bulma-components";
-import { useDropzone } from "react-dropzone";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
+import ChangeAvatar from "../components/ChangeAvatar";
 import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
 import { useAppSelector } from "../hooks";
@@ -15,27 +14,19 @@ function EditPage() {
     name: "",
     bio: "",
     website: "",
-    avatar: "" as string | File,
+    avatar: "",
     isLoading: false,
-    avatarEditorScale: 13,
-    editor: null as any,
+    isModalActive: false,
   });
   const userState = useAppSelector((state) => state.user);
 
   const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setForm((state) => ({ ...state, avatar: acceptedFiles[0] }));
-  }, []);
-
-  const { getRootProps, getInputProps } = useDropzone({
-    maxSize: 5 * 1024 * 1024,
-    multiple: false,
-    onDrop,
-    noClick: true,
-    accept: "image/*",
-  });
+  const handleOpenModal = useCallback(
+    () => setForm((state) => ({ ...state, isModalActive: true })),
+    []
+  );
 
   useEffect(() => {
     if (loading) {
@@ -59,34 +50,6 @@ function EditPage() {
     setForm((state) => ({ ...state, isLoading: false }));
   }
 
-  function saveNewAvatar() {
-    const canvas = form.editor.getImage() as HTMLCanvasElement;
-
-    canvas.toBlob(saveFromBlob);
-  }
-
-  async function saveFromBlob(blob: Blob | null) {
-    if (!blob) {
-      return;
-    }
-
-    let name = "";
-
-    if (typeof form.avatar === "string") {
-      name = form.avatar;
-    } else {
-      name = form.avatar.name;
-    }
-
-    const file = new File([blob], name, { type: blob.type });
-    setForm((state) => ({ ...state, isLoading: true }));
-    await UserHandler.updateAvatar(file, userState.user!);
-    setForm((state) => ({ ...state, isLoading: false }));
-  }
-
-  const setEditorRef = (editor: any) =>
-    setForm((state) => ({ ...state, editor }));
-
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-6-tablet is-7-desktop is-4-widescreen">
@@ -95,43 +58,20 @@ function EditPage() {
           noValidate
           onSubmit={saveChanges}
         >
-          <div {...getRootProps()}>
-            <AvatarEditor
-              ref={setEditorRef}
-              image={form.avatar}
-              borderRadius={5000}
-              height={256}
-              width={256}
-              border={10}
-              scale={form.avatarEditorScale / 10}
-            />
-            <input {...getInputProps()} />
-            <br />
-            <small>Переместите ваше фото на форму выше</small>
-          </div>
-          <input
-            className="mt-3"
-            type="range"
-            min={10}
-            max={40}
-            step={1}
-            value={form.avatarEditorScale}
-            onChange={(e) =>
-              setForm((state) => ({
-                ...state,
-                avatarEditorScale: parseInt(e.target.value),
-              }))
-            }
-            style={{ width: "100%" }}
-          />
-          <Button
-            className="is-success mb-5 mt-3"
-            style={{ width: "100%" }}
-            onClick={saveNewAvatar}
-            disabled={form.isLoading}
+          <figure
+            className="image is-128x128 is-hoverable is-clickabe"
+            onClick={handleOpenModal}
           >
-            Сохранить аватар
-          </Button>
+            <img
+              className="is-rounded"
+              src={form.avatar || UserHandler.defaultAvatar}
+              alt="Аватар"
+            />
+            <div className="is-hoverable-overlay"></div>
+            <div className="is-hoverable-info">
+              <div className="is-hoverable-text">Изменить</div>
+            </div>
+          </figure>
           <div className="field" style={{ width: "100%" }}>
             <label htmlFor="name" className="label">
               Отображаемое Имя
@@ -196,6 +136,12 @@ function EditPage() {
             Сохранить
           </Button>
         </form>
+        <ChangeAvatar
+          onClickOutside={() =>
+            setForm((state) => ({ ...state, isModalActive: false }))
+          }
+          isActive={form.isModalActive}
+        />
       </Columns.Column>
     </Columns>
   );
