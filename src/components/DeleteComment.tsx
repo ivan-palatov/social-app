@@ -32,34 +32,36 @@ const DeleteComment: React.FC<IProps> = ({ postId, commentId }) => {
         isActive={isModalActive}
         onClickOutside={() => setIsModalActive(false)}
       >
-        <article className="message is-large is-danger">
-          <div className="message-header">
-            <p>Вы уверены, что хотите удалить этот комментарий?</p>
-          </div>
-          <div className="message-body">
-            <nav className="level is-mobile">
-              <div className="level-left">
-                {isLoading && (
+        <div className="modal-content">
+          <article className="message is-large is-danger">
+            <div className="message-header">
+              <p>Вы уверены, что хотите удалить этот комментарий?</p>
+            </div>
+            <div className="message-body">
+              <nav className="level is-mobile">
+                <div className="level-left">
+                  {isLoading && (
+                    <div className="level-item">
+                      <span className="icon">
+                        <Icon path={mdiLoading} spin />
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="level-right">
                   <div className="level-item">
-                    <span className="icon">
-                      <Icon path={mdiLoading} spin />
-                    </span>
+                    <Button className="is-danger" onClick={handleDeleteComment}>
+                      Да
+                    </Button>
                   </div>
-                )}
-              </div>
-              <div className="level-right">
-                <div className="level-item">
-                  <Button className="is-danger" onClick={handleDeleteComment}>
-                    Да
-                  </Button>
+                  <div className="level-item">
+                    <Button onClick={() => setIsModalActive(false)}>Нет</Button>
+                  </div>
                 </div>
-                <div className="level-item">
-                  <Button onClick={() => setIsModalActive(false)}>Нет</Button>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </article>
+              </nav>
+            </div>
+          </article>
+        </div>
       </Modal>
     </>
   );

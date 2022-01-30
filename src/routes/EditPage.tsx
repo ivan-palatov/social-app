@@ -59,7 +59,7 @@ function EditPage() {
           onSubmit={saveChanges}
         >
           <figure
-            className="image is-128x128 is-hoverable is-clickabe"
+            className="image is-128x128 is-hoverable is-clickabe mb-3"
             onClick={handleOpenModal}
           >
             <img

@@ -14,7 +14,7 @@ const Modal: React.FC<IProps> = ({
   return ReactDOM.createPortal(
     <div className={isActive ? "modal is-active" : "modal"}>
       <div className="modal-background" onClick={onClickOutside}></div>
-      <div className="modal-content">{children}</div>
+      {children}
       <button
         className="modal-close is-large"
         aria-label="close"

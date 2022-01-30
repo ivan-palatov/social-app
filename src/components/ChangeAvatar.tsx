@@ -58,28 +58,38 @@ const ChangeAvatar: React.FC<IProps> = ({ isActive, onClickOutside }) => {
           ></button>
         </header>
         <section className="modal-card-body">
-          {avatar && (
-            <div className="is-flex is-flex-direction-column is-align-items-center">
-              <AvatarEditor
-                ref={setEditorRef}
-                image={avatar}
-                borderRadius={5000}
-                height={256}
-                width={256}
-                border={10}
-                scale={scale / 10}
-              />
-              <input
-                className="mt-3 mb-3"
-                type="range"
-                min={10}
-                max={40}
-                step={1}
-                value={scale}
-                onChange={(e) => setScale(parseInt(e.target.value))}
-              />
-            </div>
-          )}
+          <div className="is-flex is-flex-direction-column is-align-items-center">
+            {avatar ? (
+              <>
+                <AvatarEditor
+                  ref={setEditorRef}
+                  image={avatar}
+                  borderRadius={5000}
+                  height={256}
+                  width={256}
+                  border={10}
+                  scale={scale / 10}
+                />
+                <input
+                  className="mt-3 mb-3"
+                  type="range"
+                  min={10}
+                  max={40}
+                  step={1}
+                  value={scale}
+                  onChange={(e) => setScale(parseInt(e.target.value))}
+                />
+              </>
+            ) : (
+              <figure className="image is-128x128 mb-3">
+                <img
+                  className="is-rounded"
+                  src={state.user?.avatar || UserHandler.defaultAvatar}
+                  alt="Аватар"
+                />
+              </figure>
+            )}
+          </div>
           <AvatarDropzone onDrop={handleDrop} />
         </section>
         <footer className="modal-card-foot">
