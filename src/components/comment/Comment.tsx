@@ -26,19 +26,21 @@ const Comment: React.FC<IProps> = (props) => {
             <Link to={`/${props.user}`}>@{props.user}</Link>{" "}
             <small>{timeSince(props.createdAt)}</small>
             <br />
-            <Linkify
-              componentDecorator={(
-                decoratedHref: string,
-                decoratedText: string,
-                key: Key
-              ) => (
-                <SecureLink href={decoratedHref} key={key}>
-                  {decoratedText}
-                </SecureLink>
-              )}
-            >
-              {props.body}
-            </Linkify>
+            <p className="is-pre-wrap">
+              <Linkify
+                componentDecorator={(
+                  decoratedHref: string,
+                  decoratedText: string,
+                  key: Key
+                ) => (
+                  <SecureLink href={decoratedHref} key={key}>
+                    {decoratedText}
+                  </SecureLink>
+                )}
+              >
+                {props.body}
+              </Linkify>
+            </p>
           </div>
         </div>
       </div>

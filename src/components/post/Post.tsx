@@ -61,7 +61,15 @@ const Post: React.FC<IProps> = (props) => {
             </Link>{" "}
             <small>{timeSince(props.createdAt)}</small>
             <br />
-            <p onClick={navigateToPost} className="is-clickable">
+            <p
+              onClick={(e) => {
+                if (e.target !== e.currentTarget) {
+                  return;
+                }
+                navigateToPost();
+              }}
+              className="is-clickable is-pre-wrap"
+            >
               <Linkify
                 componentDecorator={(
                   decoratedHref: string,
@@ -139,7 +147,7 @@ const Post: React.FC<IProps> = (props) => {
               navigate(-1);
             }}
           >
-            <Icon size={36} path={mdiArrowLeft} />
+            <Icon path={mdiArrowLeft} />
           </span>
         </div>
       )}

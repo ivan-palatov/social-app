@@ -101,3 +101,8 @@ code {
 .is-fullwidth {
   width: 100%;
 }
+
+.is-pre-wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
