@@ -20,7 +20,7 @@ const validationSchema = yup.object({
     .required("Имя не может быть пустым")
     .min(3, "Минимум 3 символа")
     .max(100, "Максимум 100 символов"),
-  bio: yup.string().trim(),
+  bio: yup.string().trim().max(500, "Максимум 500 символов"),
   website: yup.string().trim().url("Web-сайт должен иметь реальный URL"),
 });
 

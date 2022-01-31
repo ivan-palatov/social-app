@@ -1,8 +1,10 @@
 import { mdiArrowLeft, mdiComment, mdiHeart, mdiHeartOutline } from "@mdi/js";
 import Icon from "@mdi/react";
-import React from "react";
+import React, { Key } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Linkify from "react-linkify";
 import { Link, useNavigate } from "react-router-dom";
+import { SecureLink } from "react-secure-link";
 import { auth } from "../../firebase/firebase";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { addLike, removeLike } from "../../slices/postsSlice";
@@ -60,7 +62,19 @@ const Post: React.FC<IProps> = (props) => {
             <small>{timeSince(props.createdAt)}</small>
             <br />
             <p onClick={navigateToPost} className="is-clickable">
-              {props.body}
+              <Linkify
+                componentDecorator={(
+                  decoratedHref: string,
+                  decoratedText: string,
+                  key: Key
+                ) => (
+                  <SecureLink href={decoratedHref} key={key}>
+                    {decoratedText}
+                  </SecureLink>
+                )}
+              >
+                {props.body}
+              </Linkify>
             </p>
             {props.photos.length !== 0 && (
               <>

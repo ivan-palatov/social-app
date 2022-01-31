@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Key } from "react";
+import Linkify from "react-linkify";
 import { Link } from "react-router-dom";
+import { SecureLink } from "react-secure-link";
 import { useAppSelector } from "../../hooks";
 import { IComment } from "../../utils/interfaces";
 import { timeSince } from "../../utils/timeSince";
@@ -24,7 +26,19 @@ const Comment: React.FC<IProps> = (props) => {
             <Link to={`/${props.user}`}>@{props.user}</Link>{" "}
             <small>{timeSince(props.createdAt)}</small>
             <br />
-            {props.body}
+            <Linkify
+              componentDecorator={(
+                decoratedHref: string,
+                decoratedText: string,
+                key: Key
+              ) => (
+                <SecureLink href={decoratedHref} key={key}>
+                  {decoratedText}
+                </SecureLink>
+              )}
+            >
+              {props.body}
+            </Linkify>
           </div>
         </div>
       </div>
