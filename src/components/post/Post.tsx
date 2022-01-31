@@ -1,4 +1,4 @@
-import { mdiComment, mdiHeart, mdiHeartOutline } from "@mdi/js";
+import { mdiArrowLeft, mdiComment, mdiHeart, mdiHeartOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -116,6 +116,18 @@ const Post: React.FC<IProps> = (props) => {
       </div>
       {props.shouldRenderDelete && state.user?.handle === props.user && (
         <DeletePost postId={props.id} />
+      )}
+      {!props.shouldRenderDelete && (
+        <div className="media-right">
+          <span
+            className="icon is-clickable is-medium"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <Icon size={36} path={mdiArrowLeft} />
+          </span>
+        </div>
       )}
     </article>
   );

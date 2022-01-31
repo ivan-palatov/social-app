@@ -35,6 +35,8 @@ function PostPage() {
       setIsLoading(false);
     }
 
+    window.scrollTo(0, 0);
+
     populatePost();
   }, [state.posts, id]);
 
