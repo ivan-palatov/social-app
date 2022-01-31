@@ -1,77 +1,98 @@
-import { mdiEmail, mdiGoogle, mdiLock } from "@mdi/js";
+import { mdiEmail, mdiGoogle, mdiLoading, mdiLock } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useEffect, useState } from "react";
+import { Form, Formik } from "formik";
+import React, { useEffect } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import * as yup from "yup";
+import TextInput from "../components/form/TextInput";
 import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
 
-function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .required("Email обязателен к заполнению")
+    .email("Неверный формат email'а"),
+  password: yup.string().trim().required("Пароль обязателен к заполнению"),
+});
 
-  const [user, loading] = useAuthState(auth);
+function LoginPage() {
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
-    if (loading) {
-      return;
+    if (user) {
+      window.location.assign("/");
     }
-
-    if (user) window.location.assign("/");
-  }, [user, loading]);
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    UserHandler.logInWithEmailAndPassword(email, password);
-  }
+  }, [user]);
 
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
-        <form className="box" noValidate onSubmit={handleSubmit}>
-          <div className="field">
-            <label htmlFor="email" className="label">
-              Email
-            </label>
-            <div className="control has-icons-left">
-              <input
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={async ({ email, password }, { setSubmitting }) => {
+            await UserHandler.logInWithEmailAndPassword(email, password);
+            setSubmitting(false);
+          }}
+        >
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            errors,
+            touched,
+            isSubmitting,
+          }) => (
+            <Form className="box" noValidate>
+              <TextInput
+                displayName="Email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 type="email"
-                placeholder="example@gmail.com"
-                className="input"
-                required
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.email ? errors.email : undefined}
+                iconPath={mdiEmail}
               />
-              <span className="icon is-small is-left">
-                <Icon path={mdiEmail} />
-              </span>
-            </div>
-          </div>
-          <div className="field">
-            <label htmlFor="password" className="label">
-              Пароль
-            </label>
-            <div className="control has-icons-left">
-              <input
+              <TextInput
+                displayName="Пароль"
                 id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 type="password"
-                className="input"
-                required
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.password ? errors.password : undefined}
+                iconPath={mdiLock}
               />
-              <span className="icon is-small is-left">
-                <Icon path={mdiLock} />
-              </span>
-            </div>
-          </div>
-          <Button className="is-success" type="submit">
-            Войти
-          </Button>
-        </form>
+              <nav className="level is-fullwidth">
+                <div className="level-left">
+                  <div className="level-item">
+                    <Button
+                      className="is-success"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      Сохранить
+                    </Button>
+                  </div>
+                  {isSubmitting && (
+                    <div className="level-item">
+                      <span className="icon">
+                        <Icon path={mdiLoading} spin />
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </nav>
+            </Form>
+          )}
+        </Formik>
+
         <div
+          className="is-flex is-align-items-center"
           style={{
             display: "flex",
             flexDirection: "row",
