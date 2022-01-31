@@ -97,3 +97,7 @@ code {
   height: 256px;
   width: 256px;
 }
+
+.is-fullwidth {
+  width: 100%;
+}

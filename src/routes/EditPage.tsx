@@ -1,32 +1,34 @@
-import { mdiFaceMan, mdiWeb } from "@mdi/js";
+import { mdiAccount, mdiLoading, mdiWeb } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useCallback, useEffect, useState } from "react";
+import { Form, Formik } from "formik";
+import React, { useEffect } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import ChangeAvatar from "../components/edit/ChangeAvatar";
+import * as yup from "yup";
+import Avatar from "../components/edit/Avatar";
+import TextArea from "../components/form/TextArea";
+import TextInput from "../components/form/TextInput";
 import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
 import { useAppSelector } from "../hooks";
 
+const validationSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .required("Имя не может быть пустым")
+    .min(3, "Минимум 3 символа")
+    .max(100, "Максимум 100 символов"),
+  bio: yup.string().trim(),
+  website: yup.string().trim().url("Web-сайт должен иметь реальный URL"),
+});
+
 function EditPage() {
-  const [form, setForm] = useState({
-    name: "",
-    bio: "",
-    website: "",
-    avatar: "",
-    isLoading: false,
-    isModalActive: false,
-  });
-  const userState = useAppSelector((state) => state.user);
+  const state = useAppSelector((state) => state.user);
 
   const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
-
-  const handleOpenModal = useCallback(
-    () => setForm((state) => ({ ...state, isModalActive: true })),
-    []
-  );
 
   useEffect(() => {
     if (loading) {
@@ -35,113 +37,97 @@ function EditPage() {
     if (!user) {
       return navigate("/login");
     }
-    if (!userState.user) {
+    if (!state.user) {
       return;
     }
-
-    const { name, bio, avatar, website } = userState.user;
-    setForm((state) => ({ ...state, name, bio, avatar, website }));
-  }, [user, loading, userState, navigate]);
-
-  async function saveChanges(e: any) {
-    e.preventDefault();
-    setForm((state) => ({ ...state, isLoading: true }));
-    await UserHandler.updateProfile(form.name, form.bio, form.website, user!);
-    setForm((state) => ({ ...state, isLoading: false }));
-  }
+  }, [user, loading, state, navigate]);
 
   return (
     <Columns className="is-centered">
       <Columns.Column className="is-6-tablet is-7-desktop is-4-widescreen">
-        <form
-          className="box is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
-          noValidate
-          onSubmit={saveChanges}
+        <Formik
+          initialValues={{
+            name: state.user?.name || "",
+            bio: state.user?.bio || "",
+            website: state.user?.website || "",
+          }}
+          enableReinitialize
+          validationSchema={validationSchema}
+          onSubmit={async ({ name, bio, website }, { setSubmitting }) => {
+            await UserHandler.updateProfile(
+              name.trim(),
+              bio.trim(),
+              website.trim(),
+              user!
+            );
+            setSubmitting(false);
+          }}
         >
-          <figure
-            className="image is-128x128 is-hoverable is-clickabe mb-3"
-            onClick={handleOpenModal}
-          >
-            <img
-              className="is-rounded"
-              src={form.avatar || UserHandler.defaultAvatar}
-              alt="Аватар"
-            />
-            <div className="is-hoverable-overlay"></div>
-            <div className="is-hoverable-info">
-              <div className="is-hoverable-text">Изменить</div>
-            </div>
-          </figure>
-          <div className="field" style={{ width: "100%" }}>
-            <label htmlFor="name" className="label">
-              Отображаемое Имя
-            </label>
-            <div className="control has-icons-left">
-              <input
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            isSubmitting,
+          }) => (
+            <Form
+              className="box is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
+              noValidate
+            >
+              <Avatar />
+              <TextInput
+                displayName="Отображаемое имя"
                 id="name"
-                value={form.name}
-                onChange={(e) =>
-                  setForm((state) => ({ ...state, name: e.target.value }))
-                }
-                type="text"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.name}
                 placeholder="Иванов Иван"
-                className="input"
+                iconPath={mdiAccount}
+                error={touched.name ? errors.name : undefined}
               />
-              <span className="icon is-small is-left">
-                <Icon path={mdiFaceMan} />
-              </span>
-            </div>
-          </div>
-          <div className="field" style={{ width: "100%" }}>
-            <label htmlFor="website" className="label">
-              Web-сайт
-            </label>
-            <div className="control has-icons-left">
-              <input
+              <TextInput
+                displayName="Web-сайт"
                 id="website"
-                value={form.website}
-                onChange={(e) =>
-                  setForm((state) => ({ ...state, website: e.target.value }))
-                }
+                value={values.website}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 type="url"
                 placeholder="https://google.com"
-                className="input"
+                iconPath={mdiWeb}
+                error={touched.website ? errors.website : undefined}
               />
-              <span className="icon is-small is-left">
-                <Icon path={mdiWeb} />
-              </span>
-            </div>
-          </div>
-          <div className="field" style={{ width: "100%" }}>
-            <label htmlFor="bio" className="label">
-              Напишите что-нибудь о себе
-            </label>
-            <div className="control">
-              <textarea
+              <TextArea
+                displayName="Напишите что-нибудь о себе"
                 id="bio"
-                value={form.bio}
-                onChange={(e) =>
-                  setForm((state) => ({ ...state, bio: e.target.value }))
-                }
-                className="textarea"
+                value={values.bio}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.bio ? errors.bio : undefined}
               />
-            </div>
-          </div>
-          <Button
-            className="is-success"
-            type="submit"
-            disabled={form.isLoading}
-            style={{ width: "100%" }}
-          >
-            Сохранить
-          </Button>
-        </form>
-        <ChangeAvatar
-          onClickOutside={() =>
-            setForm((state) => ({ ...state, isModalActive: false }))
-          }
-          isActive={form.isModalActive}
-        />
+              <nav className="level is-fullwidth">
+                <div className="level-left">
+                  <div className="level-item">
+                    <Button
+                      className="is-success"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      Сохранить
+                    </Button>
+                  </div>
+                  {isSubmitting && (
+                    <div className="level-item">
+                      <span className="icon">
+                        <Icon path={mdiLoading} spin />
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </nav>
+            </Form>
+          )}
+        </Formik>
       </Columns.Column>
     </Columns>
   );
