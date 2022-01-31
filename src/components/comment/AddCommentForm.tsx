@@ -2,8 +2,8 @@ import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
-import { CommentHandler } from "../firebase/CommentHandler";
-import { useAppSelector } from "../hooks";
+import { CommentHandler } from "../../firebase/CommentHandler";
+import { useAppSelector } from "../../hooks";
 
 interface IProps {
   postId: string;

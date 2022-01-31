@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Button, Columns } from "react-bulma-components";
 import InfiniteScroll from "react-infinite-scroll-component";
-import AddPostForm from "../components/AddPostForm";
-import Post from "../components/Post";
+import AddPostForm from "../components/post/AddPostForm";
+import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {

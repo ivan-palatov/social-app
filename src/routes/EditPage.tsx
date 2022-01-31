@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import ChangeAvatar from "../components/ChangeAvatar";
+import ChangeAvatar from "../components/edit/ChangeAvatar";
 import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
 import { useAppSelector } from "../hooks";

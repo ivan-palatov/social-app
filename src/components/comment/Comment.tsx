@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../hooks";
-import { IComment } from "../utils/interfaces";
-import { timeSince } from "../utils/timeSince";
+import { useAppSelector } from "../../hooks";
+import { IComment } from "../../utils/interfaces";
+import { timeSince } from "../../utils/timeSince";
 import DeleteComment from "./DeleteComment";
 
 interface IProps extends IComment {}

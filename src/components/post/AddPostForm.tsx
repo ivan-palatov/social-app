@@ -2,11 +2,11 @@ import { mdiLink, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
-import { PostHandler } from "../firebase/PostHandler";
-import { useAppSelector } from "../hooks";
+import { PostHandler } from "../../firebase/PostHandler";
+import { useAppSelector } from "../../hooks";
+import Modal from "../Modal";
 import ImagesDropzone from "./ImagesDropzone";
 import ImagesPreview from "./ImagesPreview";
-import Modal from "./Modal";
 
 interface IProps {}
 

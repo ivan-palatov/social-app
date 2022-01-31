@@ -1,5 +1,5 @@
 import React from "react";
-import SRLAppWrapper from "./SRLAppWrapper";
+import SRLAppWrapper from "../SRLAppWrapper";
 
 interface IProps {
   images: (File & {

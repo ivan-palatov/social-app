@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { CommentHandler } from "../firebase/CommentHandler";
-import { IComment } from "../utils/interfaces";
+import { CommentHandler } from "../../firebase/CommentHandler";
+import { IComment } from "../../utils/interfaces";
 import Comment from "./Comment";
 
 interface IProps {

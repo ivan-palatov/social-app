@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Columns } from "react-bulma-components";
 import { useParams } from "react-router-dom";
-import AddCommentForm from "../components/AddCommentForm";
-import Comments from "../components/Comments";
-import Post from "../components/Post";
+import AddCommentForm from "../components/comment/AddCommentForm";
+import Comments from "../components/comment/Comments";
+import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppSelector } from "../hooks";
 import { IPost } from "../utils/interfaces";

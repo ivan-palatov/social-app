@@ -2,33 +2,22 @@ import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
-import { PostHandler } from "../firebase/PostHandler";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { removePost } from "../slices/postsSlice";
-import Modal from "./Modal";
+import { CommentHandler } from "../../firebase/CommentHandler";
+import Modal from "../Modal";
 
 interface IProps {
   postId: string;
+  commentId: string;
 }
 
-const DeletePost: React.FC<IProps> = ({ postId }) => {
+const DeleteComment: React.FC<IProps> = ({ postId, commentId }) => {
   const [isModalActive, setIsModalActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const state = useAppSelector((state) => state.posts);
-  const dispatch = useAppDispatch();
 
-  async function handleDeletePost() {
+  async function handleDeleteComment() {
     setIsLoading(true);
 
-    await PostHandler.deletePost(postId);
-    if (!state.fetchedMore) {
-      return;
-    }
-
-    setIsLoading(false);
-    setIsModalActive(false);
-
-    dispatch(removePost(postId));
+    await CommentHandler.deleteComment(postId, commentId);
   }
 
   return (
@@ -46,7 +35,7 @@ const DeletePost: React.FC<IProps> = ({ postId }) => {
         <div className="modal-content">
           <article className="message is-large is-danger">
             <div className="message-header">
-              <p>Вы уверены, что хотите удалить этот пост?</p>
+              <p>Вы уверены, что хотите удалить этот комментарий?</p>
             </div>
             <div className="message-body">
               <nav className="level is-mobile">
@@ -61,7 +50,7 @@ const DeletePost: React.FC<IProps> = ({ postId }) => {
                 </div>
                 <div className="level-right">
                   <div className="level-item">
-                    <Button className="is-danger" onClick={handleDeletePost}>
+                    <Button className="is-danger" onClick={handleDeleteComment}>
                       Да
                     </Button>
                   </div>
@@ -78,4 +67,4 @@ const DeletePost: React.FC<IProps> = ({ postId }) => {
   );
 };
 
-export default DeletePost;
+export default DeleteComment;
