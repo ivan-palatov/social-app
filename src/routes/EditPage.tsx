@@ -31,16 +31,10 @@ function EditPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loading) {
-      return;
-    }
-    if (!user) {
+    if (!user && !loading) {
       return navigate("/login");
     }
-    if (!state.user) {
-      return;
-    }
-  }, [user, loading, state, navigate]);
+  }, [user, loading, navigate]);
 
   return (
     <Columns className="is-centered">
