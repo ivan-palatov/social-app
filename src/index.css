@@ -92,3 +92,8 @@ code {
   visibility: visible;
   opacity: 1;
 }
+
+.is-256x256 {
+  height: 256px;
+  width: 256px;
+}

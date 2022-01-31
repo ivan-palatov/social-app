@@ -26,7 +26,7 @@ const ChangeAvatar: React.FC<IProps> = ({ isActive, onClickOutside }) => {
   }, []);
 
   function handleSave() {
-    const canvas = editor.getImage() as HTMLCanvasElement;
+    const canvas = editor.getImageScaledToCanvas() as HTMLCanvasElement;
 
     canvas.toBlob(saveFromBlob);
   }
@@ -81,7 +81,7 @@ const ChangeAvatar: React.FC<IProps> = ({ isActive, onClickOutside }) => {
                 />
               </>
             ) : (
-              <figure className="image is-128x128 mb-3">
+              <figure className="image is-256x256 mb-3">
                 <img
                   className="is-rounded"
                   src={state.user?.avatar || UserHandler.defaultAvatar}

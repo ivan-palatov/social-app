@@ -11,7 +11,6 @@ const AvatarDropzone: React.FC<IProps> = ({ onDrop }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: "image/*",
-    maxSize: 5 * 1024 * 1024,
     multiple: false,
   });
 
@@ -25,8 +24,6 @@ const AvatarDropzone: React.FC<IProps> = ({ onDrop }) => {
           </span>
           <span className="file-label is-align-items-center is-size-4">
             {isDragActive ? "Положите фото сюда" : "Переместите фото сюда"}
-            <br />
-            <small className="is-size-6">Фото не более 5 МБ</small>
           </span>
         </span>
       </label>
