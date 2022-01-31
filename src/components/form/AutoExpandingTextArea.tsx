@@ -4,19 +4,9 @@ interface IProps
   extends React.DetailedHTMLProps<
     React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     HTMLTextAreaElement
-  > {
-  displayName: string;
-  error?: string;
-  isAutoExpanding?: boolean;
-}
+  > {}
 
-const TextArea: React.FC<IProps> = ({
-  displayName,
-  error,
-  isAutoExpanding,
-  onChange,
-  ...props
-}) => {
+const AutoExpandingTextArea: React.FC<IProps> = ({ onChange, ...props }) => {
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     if (!onChange) {
       return;
@@ -30,20 +20,12 @@ const TextArea: React.FC<IProps> = ({
   }
 
   return (
-    <div className="field is-fullwidth">
-      <label htmlFor={props.id} className="label">
-        {displayName}
-      </label>
+    <div className="field">
       <div className="control">
-        <textarea
-          {...props}
-          onChange={handleChange}
-          className={error ? "textarea is-danger" : "textarea"}
-        />
+        <textarea onChange={handleChange} {...props} />
       </div>
-      {error && <p className="help is-danger">{error}</p>}
     </div>
   );
 };
 
-export default TextArea;
+export default AutoExpandingTextArea;

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "react-bulma-components";
 import { CommentHandler } from "../../firebase/CommentHandler";
 import { useAppSelector } from "../../hooks";
+import AutoExpandingTextArea from "../form/AutoExpandingTextArea";
 
 interface IProps {
   postId: string;
@@ -13,14 +14,6 @@ const AddCommentForm: React.FC<IProps> = (props) => {
   const state = useAppSelector((state) => state.user);
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setBody(e.target.value);
-
-    // Делаем textarea автоматически расширяемой
-    e.currentTarget.style.height = "inherit";
-    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-  }
 
   async function handleSubmitComment(e: any) {
     e.preventDefault();
@@ -46,18 +39,14 @@ const AddCommentForm: React.FC<IProps> = (props) => {
         </p>
       </figure>
       <form className="media-content" noValidate onSubmit={handleSubmitComment}>
-        <div className="field">
-          <div className="control">
-            <textarea
-              id="body"
-              value={body}
-              onChange={handleChange}
-              className="textarea is-clipped"
-              placeholder="Поделитесь своими мыслями..."
-              rows={1}
-            />
-          </div>
-        </div>
+        <AutoExpandingTextArea
+          id="body"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          className="textarea is-clipped"
+          placeholder="Поделитесь своими мыслями..."
+          rows={1}
+        />
         <nav className="level">
           <div className="level-left">
             <div className="level-item">

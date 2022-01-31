@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
 import { PostHandler } from "../../firebase/PostHandler";
 import { useAppSelector } from "../../hooks";
+import AutoExpandingTextArea from "../form/AutoExpandingTextArea";
 import Modal from "../Modal";
 import ImagesDropzone from "./ImagesDropzone";
 import ImagesPreview from "./ImagesPreview";
@@ -49,14 +50,6 @@ const AddPostForm: React.FC<IProps> = () => {
     return () => images.forEach((photo) => URL.revokeObjectURL(photo.preview));
   }, [images]);
 
-  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setBody(e.target.value);
-
-    // Делаем textarea автоматически расширяемой
-    e.currentTarget.style.height = "inherit";
-    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-  }
-
   async function handleSubmitPost(e: any) {
     e.preventDefault();
     if (!body.trim() || !state.user) {
@@ -83,18 +76,14 @@ const AddPostForm: React.FC<IProps> = () => {
           </p>
         </figure>
         <form className="media-content" noValidate onSubmit={handleSubmitPost}>
-          <div className="field">
-            <div className="control">
-              <textarea
-                id="body"
-                value={body}
-                onChange={handleChange}
-                className="textarea is-clipped"
-                placeholder="Поделитесь своими мыслями..."
-                rows={1}
-              />
-            </div>
-          </div>
+          <AutoExpandingTextArea
+            id="body"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            className="textarea is-clipped"
+            placeholder="Поделитесь своими мыслями..."
+            rows={1}
+          />
           <nav className="level">
             <div className="level-left">
               <div className="level-item">
