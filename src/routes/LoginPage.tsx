@@ -51,6 +51,7 @@ function LoginPage() {
                 displayName="Email"
                 id="email"
                 type="email"
+                placeholder="example@gmail.com"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -75,7 +76,7 @@ function LoginPage() {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Сохранить
+                      Войти
                     </Button>
                   </div>
                   {isSubmitting && (
@@ -91,15 +92,8 @@ function LoginPage() {
           )}
         </Formik>
 
-        <div
-          className="is-flex is-align-items-center"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ marginRight: 10 }}>Войти с помощью </div>
+        <div className="is-flex is-align-items-center">
+          <div className="mr-3">Войти с помощью </div>
           <Button onClick={UserHandler.signInWithGoogle}>
             <span className="icon">
               <Icon path={mdiGoogle} />
