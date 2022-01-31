@@ -24,12 +24,12 @@ const AddCommentForm: React.FC<IProps> = (props) => {
 
   async function handleSubmitComment(e: any) {
     e.preventDefault();
-    if (!body || !state.user) {
+    if (!body.trim() || !state.user) {
       return;
     }
 
     setIsLoading(true);
-    await CommentHandler.addComment(props.postId, body, state.user);
+    await CommentHandler.addComment(props.postId, body.trim(), state.user);
     setBody("");
     setIsLoading(false);
   }

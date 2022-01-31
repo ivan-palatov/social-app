@@ -15,7 +15,7 @@ const AddPostForm: React.FC<IProps> = () => {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [photos, setPhotos] = useState<
+  const [images, setImages] = useState<
     (File & {
       preview: string;
     })[]
@@ -28,7 +28,7 @@ const AddPostForm: React.FC<IProps> = () => {
       Object.assign(file, { preview: URL.createObjectURL(file) })
     );
 
-    setPhotos(files);
+    setImages(files);
     setIsModalOpen(false);
   }, []);
 
@@ -46,8 +46,8 @@ const AddPostForm: React.FC<IProps> = () => {
       return;
     }
 
-    return () => photos.forEach((photo) => URL.revokeObjectURL(photo.preview));
-  }, [photos]);
+    return () => images.forEach((photo) => URL.revokeObjectURL(photo.preview));
+  }, [images]);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setBody(e.target.value);
@@ -59,19 +59,19 @@ const AddPostForm: React.FC<IProps> = () => {
 
   async function handleSubmitPost(e: any) {
     e.preventDefault();
-    if (!body || !state.user) {
+    if (!body.trim() || !state.user) {
       return;
     }
 
     setIsLoading(true);
-    await PostHandler.addPost(body, state.user, photos);
-    setPhotos([]);
+    await PostHandler.addPost(body.trim(), state.user, images);
+    setImages([]);
     setBody("");
     setIsLoading(false);
   }
 
   function removePhoto(name: string) {
-    setPhotos((photos) => photos.filter((photo) => photo.name !== name));
+    setImages((photos) => photos.filter((photo) => photo.name !== name));
   }
 
   return (
@@ -114,7 +114,7 @@ const AddPostForm: React.FC<IProps> = () => {
                   <Icon path={mdiLink} />
                 </span>
               </div>
-              <ImagesPreview images={photos} onRemovePhoto={removePhoto} />
+              <ImagesPreview images={images} onRemovePhoto={removePhoto} />
               {isLoading && (
                 <div className="level-item">
                   <span className="icon">
