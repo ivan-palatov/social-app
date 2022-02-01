@@ -9,6 +9,7 @@ interface IPostsState {
   hasMore: boolean;
   latestSnapshot: IPost[];
   fetchedMore: boolean;
+  postsType: string;
 }
 
 const initialState: IPostsState = {
@@ -17,6 +18,7 @@ const initialState: IPostsState = {
   lastCreatedAt: "",
   latestSnapshot: [],
   fetchedMore: false,
+  postsType: "feed",
 };
 
 export const postsSlice = createSlice({
@@ -47,6 +49,9 @@ export const postsSlice = createSlice({
     },
     setFetchedMore: (state, action: PayloadAction<boolean>) => {
       state.fetchedMore = action.payload;
+    },
+    setPostsType: (state, action: PayloadAction<string>) => {
+      state.postsType = action.payload;
     },
     setPostsFromLatestSnapshot: (state) => {
       state.posts = state.latestSnapshot;
@@ -79,12 +84,15 @@ export const postsSlice = createSlice({
     removePost: (state, action: PayloadAction<string>) => {
       state.posts = state.posts.filter((post) => post.id !== action.payload);
     },
+    setLatestSnapshot: (state, action: PayloadAction<IPost[]>) => {
+      state.latestSnapshot = action.payload;
+    },
   },
 });
 
 export const fetchMorePosts =
-  (lastCreatedAt: string) => async (dispatch: AppDispatch) => {
-    const posts = await PostHandler.getMorePosts(lastCreatedAt);
+  (lastCreatedAt: string, handle?: string) => async (dispatch: AppDispatch) => {
+    const posts = await PostHandler.getMorePosts(lastCreatedAt, handle);
 
     if (!posts || posts.length === 0) {
       dispatch(setHasMore(false));
@@ -107,5 +115,7 @@ export const {
   setPostsFromLatestSnapshot,
   setPostsFromSnapshot,
   removePost,
+  setPostsType,
+  setLatestSnapshot,
 } = postsSlice.actions;
 export const postsReducer = postsSlice.reducer;

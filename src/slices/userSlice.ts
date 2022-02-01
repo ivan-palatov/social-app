@@ -43,6 +43,8 @@ export const fetchUserData = (uid: string) => async (dispatch: AppDispatch) => {
   dispatch(setUser(user));
 };
 
+const { addLike, removeLike } = userSlice.actions;
+
 export const createLike =
   (storyId: string, userHandle: string) => async (dispatch: AppDispatch) => {
     dispatch(addLike(storyId));
@@ -55,5 +57,5 @@ export const deleteLike =
     await LikeHandler.removeLike(storyId, userHandle);
   };
 
-export const { setUser, setLoading, addLike, removeLike } = userSlice.actions;
+export const { setUser, setLoading } = userSlice.actions;
 export const userReducer = userSlice.reducer;

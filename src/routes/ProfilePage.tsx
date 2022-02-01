@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Button } from "react-bulma-components";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useParams } from "react-router-dom";
 import AddPostForm from "../components/post/AddPostForm";
 import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
@@ -14,30 +15,36 @@ import {
   setPostsType,
 } from "../slices/postsSlice";
 
-function FeedPage() {
+function ProfilePage() {
+  const { handle } = useParams();
   const postsState = useAppSelector((state) => state.posts);
   const userState = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (postsState.postsType !== "feed") {
+    if (!handle) {
+      return;
+    }
+
+    if (postsState.postsType !== handle) {
       dispatch(setPosts([]));
       dispatch(setLatestSnapshot([]));
-      dispatch(setPostsType("feed"));
+      dispatch(setPostsType(handle));
     }
-  }, [postsState.postsType, dispatch]);
+  }, [handle, postsState.postsType, dispatch]);
 
   useEffect(() => {
-    const unsubscribe = PostHandler.subscribeToPosts((posts) =>
-      dispatch(setPostsFromSnapshot(posts))
+    const unsubscribe = PostHandler.subscribeToPosts(
+      (posts) => dispatch(setPostsFromSnapshot(posts)),
+      handle
     );
 
     return () => unsubscribe();
-  }, [dispatch]);
+  }, [dispatch, handle]);
 
   return (
     <>
-      {userState.user && <AddPostForm />}
+      {userState.user && userState.user.handle === handle && <AddPostForm />}
       {postsState.latestSnapshot.length !== 0 && (
         <Button
           onClick={() => dispatch(setPostsFromLatestSnapshot())}
@@ -49,7 +56,7 @@ function FeedPage() {
       <InfiniteScroll
         className="is-fullwidth"
         dataLength={postsState.posts.length}
-        next={() => dispatch(fetchMorePosts(postsState.lastCreatedAt))}
+        next={() => dispatch(fetchMorePosts(postsState.lastCreatedAt, handle))}
         hasMore={postsState.hasMore}
         loader={
           <progress className="progress is-small is-success" max="100">
@@ -57,8 +64,10 @@ function FeedPage() {
           </progress>
         }
         endMessage={
-          <p className="has-text-centered">
-            <b>Ура!✨ Вы прочитали все посты!💥💥💥</b>
+          <p className="has-text-centered mt-3">
+            {postsState.posts.length === 0
+              ? "Постов пока нет 😕"
+              : "Вы всё уже прочитали 😄"}
           </p>
         }
       >
@@ -70,4 +79,4 @@ function FeedPage() {
   );
 }
 
-export default FeedPage;
+export default ProfilePage;

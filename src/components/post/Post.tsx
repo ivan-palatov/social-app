@@ -1,48 +1,40 @@
-import { mdiArrowLeft, mdiComment, mdiHeart, mdiHeartOutline } from "@mdi/js";
+import { mdiArrowLeft } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { Key } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Linkify from "react-linkify";
 import { Link, useNavigate } from "react-router-dom";
 import { SecureLink } from "react-secure-link";
-import { auth } from "../../firebase/firebase";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { addLike, removeLike } from "../../slices/postsSlice";
-import { createLike, deleteLike } from "../../slices/userSlice";
+import { useAppSelector } from "../../hooks";
 import { IPost } from "../../utils/interfaces";
 import { timeSince } from "../../utils/timeSince";
 import SRLAppWrapper from "../SRLAppWrapper";
 import DeletePost from "./DeletePost";
+import PostActions from "./PostActions";
 
 interface IProps extends IPost {
   shouldRenderDelete?: boolean;
 }
 
 const Post: React.FC<IProps> = (props) => {
-  const [user] = useAuthState(auth);
   const state = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   function navigateToPost() {
+    if (!props.shouldRenderDelete) {
+      return;
+    }
+
     navigate(`/post/${props.id}`);
   }
 
-  async function handleLike() {
-    if (!user || !state.user) {
+  function handlePostClick(
+    e: React.MouseEvent<HTMLParagraphElement, MouseEvent>
+  ) {
+    if (e.target !== e.currentTarget || !props.shouldRenderDelete) {
       return;
     }
 
-    // Удаляем лайк, если он уже был
-    if (state.user.likes.includes(props.id)) {
-      dispatch(removeLike(props.id));
-      dispatch(deleteLike(props.id, state.user.handle));
-      return;
-    }
-
-    // Добавляем лайк
-    dispatch(createLike(props.id, state.user.handle));
-    dispatch(addLike(props.id));
+    navigate(`/post/${props.id}`);
   }
 
   return (
@@ -61,15 +53,7 @@ const Post: React.FC<IProps> = (props) => {
             </Link>{" "}
             <small>{timeSince(props.createdAt)}</small>
             <br />
-            <p
-              onClick={(e) => {
-                if (e.target !== e.currentTarget) {
-                  return;
-                }
-                navigateToPost();
-              }}
-              className="is-clickable is-pre-wrap"
-            >
+            <p onClick={handlePostClick} className="is-clickable is-pre-wrap">
               <Linkify
                 componentDecorator={(
                   decoratedHref: string,
@@ -102,39 +86,7 @@ const Post: React.FC<IProps> = (props) => {
             )}
           </div>
         </div>
-        <nav className="level is-mobile">
-          <div className="level-left">
-            <div className="level-item">
-              <span
-                className="icon-text mr-3 is-clickable"
-                onClick={handleLike}
-              >
-                <span>{props.likes}</span>
-                <span className="icon">
-                  <Icon
-                    path={
-                      state.user?.likes.includes(props.id)
-                        ? mdiHeart
-                        : mdiHeartOutline
-                    }
-                    color="red"
-                  />
-                </span>
-              </span>
-            </div>
-            <div className="level-item">
-              <span
-                className="icon-text mr-3 is-clickable"
-                onClick={navigateToPost}
-              >
-                <span>{props.comments}</span>
-                <span className="icon">
-                  <Icon path={mdiComment} />
-                </span>
-              </span>
-            </div>
-          </div>
-        </nav>
+        <PostActions {...props} navigateToPost={navigateToPost} />
       </div>
       {props.shouldRenderDelete && state.user?.handle === props.user && (
         <DeletePost postId={props.id} />

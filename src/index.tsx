@@ -11,6 +11,7 @@ import FeedPage from "./routes/FeedPage";
 import HomePage from "./routes/HomePage";
 import LoginPage from "./routes/LoginPage";
 import PostPage from "./routes/PostPage";
+import ProfilePage from "./routes/ProfilePage";
 import RegisterPage from "./routes/RegisterPage";
 import ResetPage from "./routes/ResetPasswordPage";
 import { store } from "./store";
@@ -29,6 +30,7 @@ ReactDOM.render(
               <Route path="edit" element={<EditPage />} />
               <Route path="feed" element={<FeedPage />} />
               <Route path="post/:id" element={<PostPage />} />
+              <Route path=":handle" element={<ProfilePage />} />
             </Route>
           </Routes>
         </BrowserRouter>
