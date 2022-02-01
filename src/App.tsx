@@ -1,8 +1,11 @@
+import { mdiArrowUp } from "@mdi/js";
+import Icon from "@mdi/react";
 import "bulma/css/bulma.min.css";
 import React, { useEffect, useState } from "react";
 import { Columns, Container, Navbar } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, Outlet } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
 import { auth } from "./firebase/firebase";
 import { useAppDispatch } from "./hooks";
 import { fetchUserData } from "./slices/userSlice";
@@ -58,10 +61,19 @@ const App = () => {
       </Navbar>
       <Container>
         <Columns className="is-centered">
-          <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
+          <Columns.Column className="is-12-mobile is-8-tablet is-7-desktop">
             <Outlet />
           </Columns.Column>
         </Columns>
+        <ScrollToTop
+          smooth
+          component={
+            <span className="icon">
+              <Icon path={mdiArrowUp} />
+            </span>
+          }
+          className="button is-scroll-to-top is-success"
+        />
       </Container>
     </>
   );

@@ -97,7 +97,7 @@ function EditPage() {
             onBlur={handleBlur}
             error={touched.bio ? errors.bio : undefined}
           />
-          <nav className="level is-fullwidth">
+          <nav className="level is-fullwidth is-mobile">
             <div className="level-left">
               <div className="level-item">
                 <Button

@@ -67,7 +67,7 @@ function LoginPage() {
               error={touched.password ? errors.password : undefined}
               iconPath={mdiLock}
             />
-            <nav className="level is-fullwidth">
+            <nav className="level is-fullwidth is-mobile">
               <div className="level-left">
                 <div className="level-item">
                   <Button

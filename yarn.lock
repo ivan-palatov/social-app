@@ -7892,6 +7892,11 @@ react-scripts@5.0.0:
   optionalDependencies:
     fsevents "^2.3.2"
 
+react-scroll-to-top@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-scroll-to-top/-/react-scroll-to-top-1.0.8.tgz#b78731e77fb4463aa39907a3da9b153e2f0079a4"
+  integrity sha512-GXaRZnET2YUy+teAQTcd6qy3Dn8Xme4Qk+7AFhK/2DCwTuo0gu8+p6aARHyoG1TVcvzRE7QCCZYNiFZmy8HW7Q==
+
 react-secure-link@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/react-secure-link/-/react-secure-link-3.0.3.tgz#c586e19a95f3bec587209e03df1a7fffb8690e5f"

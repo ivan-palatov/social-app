@@ -84,14 +84,10 @@ const AddPostForm: React.FC<IProps> = () => {
             placeholder="Поделитесь своими мыслями..."
             rows={1}
           />
-          <nav className="level">
+          <nav className="level is-mobile my-3">
             <div className="level-left">
               <div className="level-item">
-                <Button
-                  className="is-success"
-                  style={{ margin: "10px 0" }}
-                  disabled={isLoading}
-                >
+                <Button className="is-success" disabled={isLoading}>
                   Опубликовать
                 </Button>
               </div>

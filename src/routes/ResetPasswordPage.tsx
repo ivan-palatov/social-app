@@ -59,7 +59,7 @@ function ResetPasswordPage() {
               error={touched.email ? errors.email : undefined}
               iconPath={mdiEmail}
             />
-            <nav className="level is-fullwidth">
+            <nav className="level is-fullwidth is-mobile">
               <div className="level-left">
                 <div className="level-item">
                   <Button
