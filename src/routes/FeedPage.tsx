@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
 import { Button } from "react-bulma-components";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfinitePosts from "../components/InfinitePosts";
 import AddPostForm from "../components/post/AddPostForm";
-import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
-  fetchMorePosts,
   setLatestSnapshot,
   setPosts,
   setPostsFromLatestSnapshot,
@@ -19,6 +17,7 @@ function FeedPage() {
   const userState = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
+  // Проверяем, если уже имеющиеся в state посты относятся к общему фиду или к конкретному пользователю
   useEffect(() => {
     if (postsState.postsType !== "feed") {
       dispatch(setPosts([]));
@@ -46,26 +45,7 @@ function FeedPage() {
           Показать новые посты
         </Button>
       )}
-      <InfiniteScroll
-        className="is-fullwidth"
-        dataLength={postsState.posts.length}
-        next={() => dispatch(fetchMorePosts(postsState.lastCreatedAt))}
-        hasMore={postsState.hasMore}
-        loader={
-          <progress className="progress is-small is-success" max="100">
-            15%
-          </progress>
-        }
-        endMessage={
-          <p className="has-text-centered">
-            <b>Ура!✨ Вы прочитали все посты!💥💥💥</b>
-          </p>
-        }
-      >
-        {postsState.posts.map((post) => (
-          <Post {...post} key={post.id} shouldRenderDelete />
-        ))}
-      </InfiniteScroll>
+      <InfinitePosts />
     </>
   );
 }

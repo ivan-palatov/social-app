@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { Button } from "react-bulma-components";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useParams } from "react-router-dom";
+import InfinitePosts from "../components/InfinitePosts";
 import AddPostForm from "../components/post/AddPostForm";
-import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
-  fetchMorePosts,
   setLatestSnapshot,
   setPosts,
   setPostsFromLatestSnapshot,
@@ -22,14 +20,10 @@ function ProfilePage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!handle) {
-      return;
-    }
-
     if (postsState.postsType !== handle) {
       dispatch(setPosts([]));
       dispatch(setLatestSnapshot([]));
-      dispatch(setPostsType(handle));
+      dispatch(setPostsType(handle!));
     }
   }, [handle, postsState.postsType, dispatch]);
 
@@ -53,28 +47,7 @@ function ProfilePage() {
           Показать новые посты
         </Button>
       )}
-      <InfiniteScroll
-        className="is-fullwidth"
-        dataLength={postsState.posts.length}
-        next={() => dispatch(fetchMorePosts(postsState.lastCreatedAt, handle))}
-        hasMore={postsState.hasMore}
-        loader={
-          <progress className="progress is-small is-success" max="100">
-            15%
-          </progress>
-        }
-        endMessage={
-          <p className="has-text-centered mt-3">
-            {postsState.posts.length === 0
-              ? "Постов пока нет 😕"
-              : "Вы всё уже прочитали 😄"}
-          </p>
-        }
-      >
-        {postsState.posts.map((post) => (
-          <Post {...post} key={post.id} shouldRenderDelete />
-        ))}
-      </InfiniteScroll>
+      <InfinitePosts handle={handle} />
     </>
   );
 }
