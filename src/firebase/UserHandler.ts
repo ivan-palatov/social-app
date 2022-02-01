@@ -156,4 +156,19 @@ export class UserHandler {
       console.error(error);
     }
   }
+
+  static async getUserDataByHandle(handle: string) {
+    try {
+      const q = query(collection(db, "users"), where("handle", "==", handle));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
+
+      return {
+        ...data,
+        id: doc.docs[0].id,
+      } as IUser;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }

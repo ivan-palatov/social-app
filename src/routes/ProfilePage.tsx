@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bulma-components";
 import { useParams } from "react-router-dom";
 import InfinitePosts from "../components/InfinitePosts";
 import AddPostForm from "../components/post/AddPostForm";
+import UserInfo from "../components/profile/UserInfo";
 import { PostHandler } from "../firebase/PostHandler";
+import { UserHandler } from "../firebase/UserHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   setLatestSnapshot,
@@ -12,13 +14,29 @@ import {
   setPostsFromSnapshot,
   setPostsType,
 } from "../slices/postsSlice";
+import { IUser } from "../utils/interfaces";
 
 function ProfilePage() {
   const { handle } = useParams();
+  const [user, setUser] = useState<Omit<IUser, "likes">>();
+  const [isLoading, setIsLoading] = useState(false);
+
   const postsState = useAppSelector((state) => state.posts);
   const userState = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
+  // Получаем информацию о пользователе
+  useEffect(() => {
+    async function getUser() {
+      setIsLoading(true);
+      setUser(await UserHandler.getUserDataByHandle(handle!));
+      setIsLoading(false);
+    }
+
+    getUser();
+  }, [handle]);
+
+  // Проверяем, если уже имеющиеся в state посты относятся к общему фиду или к конкретному пользователю
   useEffect(() => {
     if (postsState.postsType !== handle) {
       dispatch(setPosts([]));
@@ -36,8 +54,13 @@ function ProfilePage() {
     return () => unsubscribe();
   }, [dispatch, handle]);
 
+  if (!user && !isLoading) {
+    return <div>Пользователь не найден!</div>;
+  }
+
   return (
     <>
+      <UserInfo {...user!} />
       {userState.user && userState.user.handle === handle && <AddPostForm />}
       {postsState.latestSnapshot.length !== 0 && (
         <Button
