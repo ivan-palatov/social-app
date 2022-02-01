@@ -1,3 +1,4 @@
+import "bulma/css/bulma.min.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -5,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SimpleReactLightbox from "simple-react-lightbox";
 import App from "./App";
 import "./index.css";
+import "./modal-fx.min.css";
 import reportWebVitals from "./reportWebVitals";
 import EditPage from "./routes/EditPage";
 import FeedPage from "./routes/FeedPage";

@@ -1,6 +1,5 @@
 import { mdiArrowUp } from "@mdi/js";
 import Icon from "@mdi/react";
-import "bulma/css/bulma.min.css";
 import React, { useEffect, useState } from "react";
 import { Columns, Container, Navbar } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";

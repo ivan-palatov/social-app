@@ -12,7 +12,13 @@ const Modal: React.FC<IProps> = ({
   onClickOutside,
 }) => {
   return ReactDOM.createPortal(
-    <div className={isActive ? "modal is-active" : "modal"}>
+    <div
+      className={
+        isActive
+          ? "modal modal-fx-fadeInScale is-active"
+          : "modal modal-fx-fadeInScale"
+      }
+    >
       <div className="modal-background" onClick={onClickOutside}></div>
       {children}
       <button
