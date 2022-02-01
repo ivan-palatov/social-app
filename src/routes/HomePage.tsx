@@ -32,11 +32,9 @@ function HomePage() {
 
   return (
     <div>
-      <div>
-        Вас зовут {state.user.name}
-        <div>{user?.email}</div>
-        <Button onClick={logout}>Выйти</Button>
-      </div>
+      Вас зовут {state.user.name}
+      <div>{user?.email}</div>
+      <Button onClick={logout}>Выйти</Button>
     </div>
   );
 }

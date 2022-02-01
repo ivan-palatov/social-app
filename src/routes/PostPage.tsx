@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Columns } from "react-bulma-components";
 import { useParams } from "react-router-dom";
 import AddCommentForm from "../components/comment/AddCommentForm";
 import Comments from "../components/comment/Comments";
@@ -54,13 +53,11 @@ function PostPage() {
   }
 
   return (
-    <Columns className="is-centered">
-      <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
-        <Post {...post} />
-        <AddCommentForm postId={id} />
-        <Comments postId={id} />
-      </Columns.Column>
-    </Columns>
+    <>
+      <Post {...post} />
+      <AddCommentForm postId={id} />
+      <Comments postId={id} />
+    </>
   );
 }
 

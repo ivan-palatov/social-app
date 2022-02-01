@@ -1,6 +1,6 @@
 import "bulma/css/bulma.min.css";
 import React, { useEffect, useState } from "react";
-import { Container, Navbar } from "react-bulma-components";
+import { Columns, Container, Navbar } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, Outlet } from "react-router-dom";
 import { auth } from "./firebase/firebase";
@@ -57,7 +57,11 @@ const App = () => {
         </Navbar.Menu>
       </Navbar>
       <Container>
-        <Outlet />
+        <Columns className="is-centered">
+          <Columns.Column className="is-12-mobile is-8-tablet is-6-desktop">
+            <Outlet />
+          </Columns.Column>
+        </Columns>
       </Container>
     </>
   );

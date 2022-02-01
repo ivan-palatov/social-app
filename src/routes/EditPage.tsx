@@ -2,7 +2,7 @@ import { mdiAccount, mdiLoading, mdiWeb } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import { Button, Columns } from "react-bulma-components";
+import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -37,93 +37,89 @@ function EditPage() {
   }, [user, loading, navigate]);
 
   return (
-    <Columns className="is-centered">
-      <Columns.Column className="is-6-tablet is-7-desktop is-4-widescreen">
-        <Formik
-          initialValues={{
-            name: state.user?.name || "",
-            bio: state.user?.bio || "",
-            website: state.user?.website || "",
-          }}
-          enableReinitialize
-          validationSchema={validationSchema}
-          onSubmit={async ({ name, bio, website }, { setSubmitting }) => {
-            await UserHandler.updateProfile(
-              name.trim(),
-              bio.trim(),
-              website.trim(),
-              user!
-            );
-            setSubmitting(false);
-          }}
+    <Formik
+      initialValues={{
+        name: state.user?.name || "",
+        bio: state.user?.bio || "",
+        website: state.user?.website || "",
+      }}
+      enableReinitialize
+      validationSchema={validationSchema}
+      onSubmit={async ({ name, bio, website }, { setSubmitting }) => {
+        await UserHandler.updateProfile(
+          name.trim(),
+          bio.trim(),
+          website.trim(),
+          user!
+        );
+        setSubmitting(false);
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        isSubmitting,
+      }) => (
+        <Form
+          className="box is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
+          noValidate
         >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-          }) => (
-            <Form
-              className="box is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
-              noValidate
-            >
-              <Avatar />
-              <TextInput
-                displayName="Отображаемое имя"
-                id="name"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.name}
-                placeholder="Иванов Иван"
-                iconPath={mdiAccount}
-                error={touched.name ? errors.name : undefined}
-              />
-              <TextInput
-                displayName="Web-сайт"
-                id="website"
-                value={values.website}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                type="url"
-                placeholder="https://google.com"
-                iconPath={mdiWeb}
-                error={touched.website ? errors.website : undefined}
-              />
-              <TextArea
-                displayName="Напишите что-нибудь о себе"
-                id="bio"
-                value={values.bio}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.bio ? errors.bio : undefined}
-              />
-              <nav className="level is-fullwidth">
-                <div className="level-left">
-                  <div className="level-item">
-                    <Button
-                      className="is-success"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      Сохранить
-                    </Button>
-                  </div>
-                  {isSubmitting && (
-                    <div className="level-item">
-                      <span className="icon">
-                        <Icon path={mdiLoading} spin />
-                      </span>
-                    </div>
-                  )}
+          <Avatar />
+          <TextInput
+            displayName="Отображаемое имя"
+            id="name"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.name}
+            placeholder="Иванов Иван"
+            iconPath={mdiAccount}
+            error={touched.name ? errors.name : undefined}
+          />
+          <TextInput
+            displayName="Web-сайт"
+            id="website"
+            value={values.website}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            type="url"
+            placeholder="https://google.com"
+            iconPath={mdiWeb}
+            error={touched.website ? errors.website : undefined}
+          />
+          <TextArea
+            displayName="Напишите что-нибудь о себе"
+            id="bio"
+            value={values.bio}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.bio ? errors.bio : undefined}
+          />
+          <nav className="level is-fullwidth">
+            <div className="level-left">
+              <div className="level-item">
+                <Button
+                  className="is-success"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  Сохранить
+                </Button>
+              </div>
+              {isSubmitting && (
+                <div className="level-item">
+                  <span className="icon">
+                    <Icon path={mdiLoading} spin />
+                  </span>
                 </div>
-              </nav>
-            </Form>
-          )}
-        </Formik>
-      </Columns.Column>
-    </Columns>
+              )}
+            </div>
+          </nav>
+        </Form>
+      )}
+    </Formik>
   );
 }
 

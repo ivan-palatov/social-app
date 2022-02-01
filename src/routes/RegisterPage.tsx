@@ -2,7 +2,7 @@ import { mdiAccount, mdiEmail, mdiGoogle, mdiLoading, mdiLock } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import { Button, Columns } from "react-bulma-components";
+import { Button } from "react-bulma-components";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import TextInput from "../components/form/TextInput";
@@ -38,100 +38,94 @@ function RegisterPage() {
   }, [state.user, navigate]);
 
   return (
-    <Columns className="is-centered">
-      <Columns.Column className="is-5-tablet is-4-desktop is-3-widescreen">
-        <Formik
-          initialValues={{ name: "", email: "", password: "" }}
-          onSubmit={async ({ name, email, password }, { setSubmitting }) => {
-            await UserHandler.registerWithEmailAndPassword(
-              name,
-              email,
-              password
-            );
-            setSubmitting(false);
+    <>
+      <Formik
+        initialValues={{ name: "", email: "", password: "" }}
+        onSubmit={async ({ name, email, password }, { setSubmitting }) => {
+          await UserHandler.registerWithEmailAndPassword(name, email, password);
+          setSubmitting(false);
 
-            window.location.assign("/edit");
-          }}
-          validationSchema={validationSchema}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-          }) => (
-            <Form className="box" noValidate>
-              <TextInput
-                displayName="Отображаемое имя"
-                id="name"
-                type="text"
-                placeholder="Иванов Иван"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.name ? errors.name : undefined}
-                iconPath={mdiAccount}
-              />
-              <TextInput
-                displayName="Email"
-                id="email"
-                type="email"
-                placeholder="example@gmail.com"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.email ? errors.email : undefined}
-                iconPath={mdiEmail}
-              />
-              <TextInput
-                displayName="Пароль"
-                id="password"
-                type="password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.password ? errors.password : undefined}
-                iconPath={mdiLock}
-              />
-              <nav className="level is-fullwidth">
-                <div className="level-left">
-                  <div className="level-item">
-                    <Button
-                      className="is-success"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      Зарегистрироваться
-                    </Button>
-                  </div>
-                  {isSubmitting && (
-                    <div className="level-item">
-                      <span className="icon">
-                        <Icon path={mdiLoading} spin />
-                      </span>
-                    </div>
-                  )}
+          window.location.assign("/edit");
+        }}
+        validationSchema={validationSchema}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          isSubmitting,
+        }) => (
+          <Form className="box" noValidate>
+            <TextInput
+              displayName="Отображаемое имя"
+              id="name"
+              type="text"
+              placeholder="Иванов Иван"
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.name ? errors.name : undefined}
+              iconPath={mdiAccount}
+            />
+            <TextInput
+              displayName="Email"
+              id="email"
+              type="email"
+              placeholder="example@gmail.com"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.email ? errors.email : undefined}
+              iconPath={mdiEmail}
+            />
+            <TextInput
+              displayName="Пароль"
+              id="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.password ? errors.password : undefined}
+              iconPath={mdiLock}
+            />
+            <nav className="level is-fullwidth">
+              <div className="level-left">
+                <div className="level-item">
+                  <Button
+                    className="is-success"
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    Зарегистрироваться
+                  </Button>
                 </div>
-              </nav>
-            </Form>
-          )}
-        </Formik>
+                {isSubmitting && (
+                  <div className="level-item">
+                    <span className="icon">
+                      <Icon path={mdiLoading} spin />
+                    </span>
+                  </div>
+                )}
+              </div>
+            </nav>
+          </Form>
+        )}
+      </Formik>
 
-        <div className="is-flex is-align-items-center">
-          <div className="mr-3">Зарегистрироваться с помощью</div>
-          <Button onClick={UserHandler.signInWithGoogle}>
-            <span className="icon">
-              <Icon path={mdiGoogle} />
-            </span>
-          </Button>
-        </div>
-        <div>
-          Уже есть аккаунт? <Link to="/login">Войдите</Link> сейчас.
-        </div>
-      </Columns.Column>
-    </Columns>
+      <div className="is-flex is-align-items-center">
+        <div className="mr-3">Зарегистрироваться с помощью</div>
+        <Button onClick={UserHandler.signInWithGoogle}>
+          <span className="icon">
+            <Icon path={mdiGoogle} />
+          </span>
+        </Button>
+      </div>
+      <div>
+        Уже есть аккаунт? <Link to="/login">Войдите</Link> сейчас.
+      </div>
+    </>
   );
 }
 export default RegisterPage;

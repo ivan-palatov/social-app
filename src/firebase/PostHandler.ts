@@ -10,6 +10,7 @@ import {
   orderBy,
   query,
   startAfter,
+  where,
 } from "firebase/firestore";
 import { createImagesNames } from "../utils/createImageNames";
 import { IPost, IUser } from "../utils/interfaces";
@@ -55,12 +56,14 @@ export class PostHandler {
     }
   }
 
-  static subscribeToPosts(callback: (posts: IPost[]) => void) {
-    const q = query(
-      collection(db, "posts"),
-      orderBy("createdAt", "desc"),
-      limit(10)
-    );
+  static subscribeToPosts(callback: (posts: IPost[]) => void, handle?: string) {
+    const constraints = [orderBy("createdAt", "desc"), limit(10)];
+
+    if (handle) {
+      constraints.unshift(where("user", "==", handle));
+    }
+
+    const q = query(collection(db, "posts"), ...constraints);
 
     return onSnapshot(q, (snapshot) =>
       callback(
@@ -69,14 +72,19 @@ export class PostHandler {
     );
   }
 
-  static async getMorePosts(lastCreatedAt: string) {
+  static async getMorePosts(lastCreatedAt: string, handle?: string) {
     try {
-      const q = query(
-        collection(db, "posts"),
+      const constraints = [
         orderBy("createdAt", "desc"),
         startAfter(lastCreatedAt),
-        limit(10)
-      );
+        limit(10),
+      ];
+
+      if (handle) {
+        constraints.unshift(where("user", "==", handle));
+      }
+
+      const q = query(collection(db, "posts"), ...constraints);
       const docs = await getDocs(q);
 
       return docs.docs.map((doc) => ({
