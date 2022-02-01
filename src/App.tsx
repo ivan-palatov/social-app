@@ -21,8 +21,7 @@ const App = () => {
     }
 
     dispatch(fetchUserData(user.uid));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, dispatch]);
 
   return (
     <>

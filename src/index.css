@@ -15,7 +15,7 @@ code {
 .image-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5px 5px;
+  gap: 0.4rem;
   align-items: center;
 
   width: 100%;
@@ -108,7 +108,7 @@ code {
 }
 
 .is-scroll-to-top {
-  left: 40px;
+  right: 40px;
   bottom: 40px;
   position: fixed;
   z-index: 2;
@@ -120,4 +120,11 @@ code {
   box-shadow: 0 9px 25px 0 rgba(132, 128, 177, 0.28);
   border: none;
   outline: none;
+}
+
+@media screen and (min-width: 769px) {
+  .is-scroll-to-top {
+    left: 40px;
+    right: unset;
+  }
 }
