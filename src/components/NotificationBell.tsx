@@ -19,10 +19,10 @@ const NotificationBell: React.FC<IProps> = () => {
       return;
     }
 
-    const unsubscribe = NotificationHandler.subscribeToNotifications((snap) => {
-      console.log("NotificationBell: ", snap);
-      dispatch(setNotifications(snap));
-    }, state.user.handle);
+    const unsubscribe = NotificationHandler.subscribeToNotifications(
+      (snap) => dispatch(setNotifications(snap)),
+      state.user.handle
+    );
 
     return () => unsubscribe();
   }, [dispatch, state.user]);

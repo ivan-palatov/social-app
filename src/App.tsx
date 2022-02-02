@@ -1,18 +1,17 @@
 import { mdiArrowUp } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useEffect, useState } from "react";
-import { Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, Outlet } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import AnimatedPage from "./components/AnimatedPage";
+import LeftColumn from "./components/layout/LeftColumn";
 import NotificationBell from "./components/NotificationBell";
 import { auth } from "./firebase/firebase";
-import { useAppDispatch, useAppSelector } from "./hooks";
+import { useAppDispatch } from "./hooks";
 import { fetchUserData, setLoading } from "./slices/userSlice";
 
 const App = () => {
-  const state = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [isBurgerActive, setIsBurgerActive] = useState(false);
   const [user, loading] = useAuthState(auth);
@@ -42,7 +41,7 @@ const App = () => {
             onClick={() => setIsBurgerActive(!isBurgerActive)}
             aria-label="menu"
             aria-expanded="false"
-            data-target="navbarMenu"
+            data-target="navigation-menu"
             role="button"
             className={
               isBurgerActive
@@ -55,36 +54,30 @@ const App = () => {
             <span aria-hidden="true"></span>
           </div>
         </div>
-        <div
-          id="navbarMenu"
-          className={isBurgerActive ? "navbar-menu is-active" : "navbar-menu"}
-        >
-          <div className="navbar-start">
-            {user ? (
-              <div className="navbar-item">
-                <Link to={`/${state.user?.handle}`}>Профиль</Link>
-              </div>
-            ) : (
-              <>
-                <div className="navbar-item">
-                  <Link to="/login">Войти</Link>
-                </div>
-                <div className="navbar-item">
-                  <Link to="/register">Регистрация</Link>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
       </nav>
+      <div
+        className={
+          isBurgerActive
+            ? "mobile-navigation mobile-navigation-active"
+            : "mobile-navigation"
+        }
+        id="navigation-menu"
+        onClick={() => setIsBurgerActive(false)}
+      >
+        <LeftColumn />
+      </div>
       <main className="container">
-        <Columns className="is-centered">
-          <Columns.Column className="is-12-mobile is-8-tablet is-7-desktop">
+        <div className="is-centered columns">
+          <div className="column is-hidden-touch">
+            <LeftColumn />
+          </div>
+          <div className="column is-12-mobile is-8-tablet is-7-desktop">
             <AnimatedPage>
               <Outlet />
             </AnimatedPage>
-          </Columns.Column>
-        </Columns>
+          </div>
+          <div className="column is-hidden-mobile">Право</div>
+        </div>
         <ScrollToTop
           smooth
           component={
