@@ -1,4 +1,4 @@
-import { mdiLink, mdiLoading } from "@mdi/js";
+import { mdiAttachment, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bulma-components";
@@ -91,12 +91,15 @@ const AddPostForm: React.FC<IProps> = () => {
                   Опубликовать
                 </Button>
               </div>
-              <div className="level-item">
+              <div
+                className="level-item has-tooltip-arrow"
+                data-tooltip="Прикрепить изображения"
+              >
                 <span
                   className="icon is-clickable"
                   onClick={() => setIsModalOpen(true)}
                 >
-                  <Icon path={mdiLink} />
+                  <Icon path={mdiAttachment} />
                 </span>
               </div>
               <ImagesPreview images={images} onRemovePhoto={removePhoto} />

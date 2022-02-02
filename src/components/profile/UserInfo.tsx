@@ -1,4 +1,4 @@
-import { mdiCalendar, mdiLink } from "@mdi/js";
+import { mdiCalendarOutline, mdiEmailOutline, mdiLink } from "@mdi/js";
 import Icon from "@mdi/react";
 import React from "react";
 import { UserHandler } from "../../firebase/UserHandler";
@@ -21,10 +21,18 @@ const UserInfo: React.FC<IProps> = (props) => {
       {props.id && (
         <>
           <small>@{props.handle}</small>
-          <p>{props.bio}</p>
-          <div className="is-flex">
+          <p className="mb-3">{props.bio}</p>
+          <div className="is-flex is-flex-wrap-wrap is-justify-content-center">
+            <div className="is-flex">
+              <span className="icon mr-1">
+                <Icon path={mdiEmailOutline} />
+              </span>
+              <a href={`mailto:${props.email}`} className="mr-3">
+                {props.email}
+              </a>
+            </div>
             {props.website && (
-              <>
+              <div className="is-flex">
                 <span className="icon mr-1">
                   <Icon path={mdiLink} />
                 </span>
@@ -36,12 +44,14 @@ const UserInfo: React.FC<IProps> = (props) => {
                 >
                   {props.website}
                 </a>
-              </>
+              </div>
             )}
-            <span className="icon mr-1">
-              <Icon path={mdiCalendar} />
-            </span>
-            {formatDate(props.createdAt)}
+            <div className="is-flex">
+              <span className="icon mr-1">
+                <Icon path={mdiCalendarOutline} />
+              </span>
+              {formatDate(props.createdAt)}
+            </div>
           </div>
         </>
       )}
