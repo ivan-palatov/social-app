@@ -1,16 +1,18 @@
 import { mdiArrowUp } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useEffect, useState } from "react";
-import { Columns, Container, Navbar } from "react-bulma-components";
+import { Columns } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, Outlet } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import AnimatedPage from "./components/AnimatedPage";
+import NotificationBell from "./components/NotificationBell";
 import { auth } from "./firebase/firebase";
-import { useAppDispatch } from "./hooks";
+import { useAppDispatch, useAppSelector } from "./hooks";
 import { fetchUserData, setLoading } from "./slices/userSlice";
 
 const App = () => {
+  const state = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [isBurgerActive, setIsBurgerActive] = useState(false);
   const [user, loading] = useAuthState(auth);
@@ -30,40 +32,52 @@ const App = () => {
 
   return (
     <>
-      <Navbar>
-        <Navbar.Brand>
+      <nav className="navbar" role="navigation" aria-label="main navigation">
+        <div className="navbar-brand is-align-items-center">
           <Link to="/" className="navbar-item">
             Social App
           </Link>
-          <Navbar.Burger
+          <NotificationBell />
+          <div
             onClick={() => setIsBurgerActive(!isBurgerActive)}
             aria-label="menu"
             aria-expanded="false"
             data-target="navbarMenu"
-            className={isBurgerActive ? "is-active" : ""}
-          />
-        </Navbar.Brand>
-        <Navbar.Menu
+            role="button"
+            className={
+              isBurgerActive
+                ? "navbar-burger is-active ml-3"
+                : "navbar-burger ml-3"
+            }
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </div>
+        </div>
+        <div
           id="navbarMenu"
-          className={isBurgerActive ? "is-active" : ""}
+          className={isBurgerActive ? "navbar-menu is-active" : "navbar-menu"}
         >
-          {user ? (
-            <Navbar.Item renderAs={Link} to="/me">
-              Профиль
-            </Navbar.Item>
-          ) : (
-            <>
-              <Navbar.Item renderAs={Link} to="/login">
-                Войти
-              </Navbar.Item>
-              <Navbar.Item renderAs={Link} to="/register">
-                Зарегистрироваться
-              </Navbar.Item>
-            </>
-          )}
-        </Navbar.Menu>
-      </Navbar>
-      <Container>
+          <div className="navbar-start">
+            {user ? (
+              <div className="navbar-item">
+                <Link to={`/${state.user?.handle}`}>Профиль</Link>
+              </div>
+            ) : (
+              <>
+                <div className="navbar-item">
+                  <Link to="/login">Войти</Link>
+                </div>
+                <div className="navbar-item">
+                  <Link to="/register">Регистрация</Link>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
+      <main className="container">
         <Columns className="is-centered">
           <Columns.Column className="is-12-mobile is-8-tablet is-7-desktop">
             <AnimatedPage>
@@ -80,7 +94,7 @@ const App = () => {
           }
           className="button is-scroll-to-top is-success"
         />
-      </Container>
+      </main>
     </>
   );
 };

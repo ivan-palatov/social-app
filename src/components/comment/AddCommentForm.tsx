@@ -3,11 +3,13 @@ import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { Button } from "react-bulma-components";
 import { CommentHandler } from "../../firebase/CommentHandler";
+import { NotificationHandler } from "../../firebase/NotificationHandler";
 import { useAppSelector } from "../../hooks";
 import AutoExpandingTextArea from "../form/AutoExpandingTextArea";
 
 interface IProps {
-  postId: string;
+  id: string;
+  userHandle: string;
 }
 
 const AddCommentForm: React.FC<IProps> = (props) => {
@@ -22,9 +24,20 @@ const AddCommentForm: React.FC<IProps> = (props) => {
     }
 
     setIsLoading(true);
-    await CommentHandler.addComment(props.postId, body.trim(), state.user);
+    await CommentHandler.addComment(props.id, body.trim(), state.user);
     setBody("");
     setIsLoading(false);
+
+    if (state.user.handle === props.userHandle) {
+      return;
+    }
+
+    await NotificationHandler.createNotification(
+      state.user,
+      props.id,
+      "comment",
+      props.userHandle
+    );
   }
 
   if (!state.user) {

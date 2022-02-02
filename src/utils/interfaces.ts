@@ -33,3 +33,15 @@ export interface IUser {
   website: string;
   likes: string[];
 }
+
+export interface INotification {
+  id: string;
+  from: string;
+  to: string;
+  isRead: boolean;
+  name: string;
+  avatar: string;
+  type: "like" | "comment";
+  postId: string;
+  createdAt: string;
+}

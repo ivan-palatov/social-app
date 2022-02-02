@@ -1,6 +1,7 @@
 import { mdiCommentOutline, mdiHeart, mdiHeartOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import React from "react";
+import { NotificationHandler } from "../../firebase/NotificationHandler";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { addLike, removeLike } from "../../slices/postsSlice";
 import { createLike, deleteLike } from "../../slices/userSlice";
@@ -29,6 +30,18 @@ const PostActions: React.FC<IProps> = ({ navigateToPost, ...props }) => {
     // Добавляем лайк
     dispatch(createLike(props.id, state.user.handle));
     dispatch(addLike(props.id));
+
+    // Добавляем оповещение о лайке, если юзер не лайкает свой же пост
+    if (state.user.handle === props.user) {
+      return;
+    }
+
+    await NotificationHandler.createNotification(
+      state.user,
+      props.id,
+      "like",
+      props.user
+    );
   }
 
   return (

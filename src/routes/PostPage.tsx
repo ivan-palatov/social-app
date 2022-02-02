@@ -4,12 +4,14 @@ import AddCommentForm from "../components/comment/AddCommentForm";
 import Comments from "../components/comment/Comments";
 import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setPosts } from "../slices/postsSlice";
 import { IPost } from "../utils/interfaces";
 
 function PostPage() {
   const { id } = useParams();
   const state = useAppSelector((state) => state.posts);
+  const dispatch = useAppDispatch();
   const [post, setPost] = useState<IPost>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,13 +33,14 @@ function PostPage() {
       }
 
       setPost(post);
+      dispatch(setPosts([post]));
       setIsLoading(false);
     }
 
     window.scrollTo(0, 0);
 
     populatePost();
-  }, [state.posts, id]);
+  }, [state.posts, id, dispatch]);
 
   if (isLoading) {
     return (
@@ -55,7 +58,7 @@ function PostPage() {
   return (
     <>
       <Post {...post} />
-      <AddCommentForm postId={id} />
+      <AddCommentForm id={id} userHandle={post.user} />
       <Comments postId={id} />
     </>
   );
