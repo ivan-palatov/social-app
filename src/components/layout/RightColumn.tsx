@@ -32,8 +32,6 @@ const RightColumn: React.FC<IProps> = () => {
       setIsLoading(false);
     }
 
-    console.log("wtf");
-
     fetchUsers();
   }, []);
 
