@@ -7,20 +7,25 @@ import { Link, Outlet } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import { auth } from "./firebase/firebase";
 import { useAppDispatch } from "./hooks";
-import { fetchUserData } from "./slices/userSlice";
+import { fetchUserData, setLoading } from "./slices/userSlice";
 
 const App = () => {
   const dispatch = useAppDispatch();
   const [isBurgerActive, setIsBurgerActive] = useState(false);
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
+    if (loading) {
+      return;
+    }
+
     if (!user) {
+      dispatch(setLoading(false));
       return;
     }
 
     dispatch(fetchUserData(user.uid));
-  }, [user, dispatch]);
+  }, [user, dispatch, loading]);
 
   return (
     <>

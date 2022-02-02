@@ -3,12 +3,11 @@ import Icon from "@mdi/react";
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import { Button } from "react-bulma-components";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import TextInput from "../components/form/TextInput";
-import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
+import { useAppSelector } from "../hooks";
 
 const validationSchema = yup.object({
   email: yup
@@ -19,13 +18,14 @@ const validationSchema = yup.object({
 });
 
 function LoginPage() {
-  const [user] = useAuthState(auth);
+  const state = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      window.location.assign("/");
+    if (state.user) {
+      navigate("/feed");
     }
-  }, [user]);
+  }, [state.user, navigate]);
 
   return (
     <>

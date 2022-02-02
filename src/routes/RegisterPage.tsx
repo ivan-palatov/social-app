@@ -33,7 +33,7 @@ function RegisterPage() {
 
   useEffect(() => {
     if (state.user) {
-      navigate("/");
+      navigate("/edit");
     }
   }, [state.user, navigate]);
 
@@ -44,8 +44,6 @@ function RegisterPage() {
         onSubmit={async ({ name, email, password }, { setSubmitting }) => {
           await UserHandler.registerWithEmailAndPassword(name, email, password);
           setSubmitting(false);
-
-          window.location.assign("/edit");
         }}
         validationSchema={validationSchema}
       >
