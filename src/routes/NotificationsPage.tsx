@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import Loader from "../components/layout/Loader";
 import { NotificationHandler } from "../firebase/NotificationHandler";
 import { useAppSelector } from "../hooks";
 import { timeSince } from "../utils/timeSince";
@@ -7,18 +8,20 @@ import { timeSince } from "../utils/timeSince";
 interface IProps {}
 
 const NotificationsPage: React.FC<IProps> = () => {
-  const state = useAppSelector((state) => state.user);
+  const userState = useAppSelector((state) => state.user);
+  const notificationsState = useAppSelector((state) => state.notifications);
 
   useEffect(() => {
-    if (
-      !state.user ||
-      state.notifications.filter((note) => !note.isRead).length === 0
-    ) {
+    if (!userState.user || notificationsState.unreadSize === 0) {
       return;
     }
 
-    NotificationHandler.markAllAsRead(state.user.handle);
-  }, [state.notifications, state.user]);
+    NotificationHandler.markAllAsRead(userState.user.handle);
+  }, [notificationsState.unreadSize, userState.user]);
+
+  if (notificationsState.loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="is-flex is-flex-direction-column is-align-items-center">
@@ -26,7 +29,7 @@ const NotificationsPage: React.FC<IProps> = () => {
         <strong>Уведомления</strong>
       </span>
       <ul>
-        {state.notifications.map((notification) => (
+        {notificationsState.notifications.map((notification) => (
           <li className="media is-align-items-center" key={notification.id}>
             <figure className="media-left image is-32x32">
               <img

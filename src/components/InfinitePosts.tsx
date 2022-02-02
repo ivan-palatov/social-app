@@ -2,6 +2,7 @@ import React, { memo, useCallback } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchMorePosts } from "../slices/postsSlice";
+import Loader from "./layout/Loader";
 import Post from "./post/Post";
 
 interface IProps {
@@ -22,11 +23,7 @@ const InfinitePosts: React.FC<IProps> = ({ handle }) => {
       dataLength={state.posts.length}
       next={fetchMore}
       hasMore={state.hasMore}
-      loader={
-        <progress className="progress is-small is-success" max="100">
-          15%
-        </progress>
-      }
+      loader={<Loader />}
       endMessage={
         <p className="has-text-centered mt-3">
           {state.posts.length === 0

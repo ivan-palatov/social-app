@@ -4,28 +4,29 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationHandler } from "../firebase/NotificationHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { setNotifications } from "../slices/userSlice";
+import { setNotifications } from "../slices/notificationsSlice";
 
 interface IProps {}
 
 const NotificationBell: React.FC<IProps> = () => {
-  const state = useAppSelector((state) => state.user);
+  const userState = useAppSelector((state) => state.user);
+  const notificationsState = useAppSelector((state) => state.notifications);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!state.user) {
+    if (!userState.user) {
       return;
     }
 
     const unsubscribe = NotificationHandler.subscribeToNotifications(
       (snap) => dispatch(setNotifications(snap)),
-      state.user.handle
+      userState.user.handle
     );
 
     return () => unsubscribe();
-  }, [dispatch, state.user]);
+  }, [dispatch, userState.user]);
 
   function openNotifications() {
     if (location.pathname === "/notifications") {
@@ -44,12 +45,12 @@ const NotificationBell: React.FC<IProps> = () => {
       <span className="icon is-medium">
         <Icon path={mdiBellOutline} />
       </span>
-      {state.notifications.filter((note) => !note.isRead).length > 0 && (
+      {notificationsState.unreadSize > 0 && (
         <span
           className="badge is-danger is-bottom-left"
           style={{ right: -7, bottom: 9, left: "auto" }}
         >
-          {state.notifications.filter((note) => !note.isRead).length}
+          {notificationsState.unreadSize}
         </span>
       )}
     </div>

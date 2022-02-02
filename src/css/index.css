@@ -145,3 +145,7 @@ code {
 .mobile-navigation-active {
   left: 0;
 }
+
+.is-fullheight {
+  height: 80vh;
+}

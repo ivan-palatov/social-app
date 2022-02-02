@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bulma-components";
 import { useParams } from "react-router-dom";
 import InfinitePosts from "../components/InfinitePosts";
+import Loader from "../components/layout/Loader";
 import AddPostForm from "../components/post/AddPostForm";
 import UserInfo from "../components/profile/UserInfo";
 import { PostHandler } from "../firebase/PostHandler";
@@ -15,6 +16,7 @@ import {
   setPostsType,
 } from "../slices/postsSlice";
 import { IUser } from "../utils/interfaces";
+import NotFoundPage from "./NotFoundPage";
 
 function ProfilePage() {
   const { handle } = useParams();
@@ -54,8 +56,12 @@ function ProfilePage() {
     return () => unsubscribe();
   }, [dispatch, handle]);
 
-  if (!user && !isLoading) {
-    return <div>Пользователь не найден!</div>;
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!user) {
+    return <NotFoundPage />;
   }
 
   return (

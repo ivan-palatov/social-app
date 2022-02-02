@@ -73,7 +73,7 @@ const LeftColumn: React.FC<IProps> = () => {
           </>
         )}
         <li className="my-2">
-          <Link to="/feed" className="icon-text is-fullwidth py-2">
+          <Link to="/" className="icon-text is-fullwidth py-2">
             <span className="icon">
               <Icon path={mdiNewspaperVariantOutline} />
             </span>

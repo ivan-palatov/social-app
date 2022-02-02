@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddCommentForm from "../components/comment/AddCommentForm";
 import Comments from "../components/comment/Comments";
+import Loader from "../components/layout/Loader";
 import Post from "../components/post/Post";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { setPosts } from "../slices/postsSlice";
 import { IPost } from "../utils/interfaces";
+import NotFoundPage from "./NotFoundPage";
 
 function PostPage() {
   const { id } = useParams();
@@ -43,16 +45,11 @@ function PostPage() {
   }, [state.posts, id, dispatch]);
 
   if (isLoading) {
-    return (
-      <progress className="progress is-small is-success" max="100">
-        15%
-      </progress>
-    );
+    return <Loader />;
   }
 
   if (!post || !id) {
-    // TODO: make 404
-    return null;
+    return <NotFoundPage />;
   }
 
   return (

@@ -2,17 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LikeHandler } from "../firebase/LikeHandler";
 import { UserHandler } from "../firebase/UserHandler";
 import { AppDispatch } from "../store";
-import { INotification, IUser } from "../utils/interfaces";
+import { IUser } from "../utils/interfaces";
 
 interface IUserState {
   user?: IUser;
-  notifications: INotification[];
   loading: boolean;
 }
 
 const initialState: IUserState = {
   loading: true,
-  notifications: [],
 };
 
 export const userSlice = createSlice({
@@ -30,9 +28,6 @@ export const userSlice = createSlice({
     },
     removeLike: (state, action: PayloadAction<string>) => {
       state.user?.likes.splice(state.user!.likes.indexOf(action.payload), 1);
-    },
-    setNotifications: (state, action: PayloadAction<INotification[]>) => {
-      state.notifications = action.payload;
     },
   },
 });
@@ -62,5 +57,5 @@ export const deleteLike =
     await LikeHandler.removeLike(storyId, userHandle);
   };
 
-export const { setUser, setLoading, setNotifications } = userSlice.actions;
+export const { setUser, setLoading } = userSlice.actions;
 export const userReducer = userSlice.reducer;

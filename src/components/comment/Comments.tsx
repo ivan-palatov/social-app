@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CommentHandler } from "../../firebase/CommentHandler";
 import { IComment } from "../../utils/interfaces";
+import Loader from "../layout/Loader";
 import Comment from "./Comment";
 
 interface IProps {
@@ -25,11 +26,7 @@ const Comments: React.FC<IProps> = ({ postId }) => {
   }, [postId]);
 
   if (isLoading) {
-    return (
-      <progress className="progress is-small is-success" max="100">
-        15%
-      </progress>
-    );
+    return <Loader />;
   }
 
   return (

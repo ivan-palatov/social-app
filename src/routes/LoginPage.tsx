@@ -23,7 +23,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (state.user) {
-      navigate("/feed");
+      navigate("/");
     }
   }, [state.user, navigate]);
 
