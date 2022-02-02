@@ -4,11 +4,11 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import SimpleReactLightbox from "simple-react-lightbox";
+import App from "./App";
 import "./css/bulma-badge.min.css";
 import "./css/bulma-tooltip.min.css";
 import "./css/index.css";
 import "./css/modal-fx.min.css";
-import Pages from "./routes/Pages";
 import { store } from "./store";
 
 ReactDOM.render(
@@ -16,7 +16,7 @@ ReactDOM.render(
     <SimpleReactLightbox>
       <Provider store={store}>
         <BrowserRouter>
-          <Pages />
+          <App />
         </BrowserRouter>
       </Provider>
     </SimpleReactLightbox>

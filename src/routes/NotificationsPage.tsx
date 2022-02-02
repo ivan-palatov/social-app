@@ -39,7 +39,9 @@ const NotificationsPage: React.FC<IProps> = () => {
               />
             </figure>
             <div className="media-content">
-              <Link to={`/${notification.from}`}>{notification.name}</Link>{" "}
+              <Link to={`/${notification.from}`}>
+                <strong>{notification.name}</strong>
+              </Link>{" "}
               {notification.type === "like" ? (
                 <span>
                   поставил лайк вашему{" "}

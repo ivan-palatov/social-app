@@ -1,8 +1,8 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import App from "../App";
 import EditPage from "./EditPage";
+import Empty from "./Empty";
 import FeedPage from "./FeedPage";
 import LoginPage from "./LoginPage";
 import NotFoundPage from "./NotFoundPage";
@@ -20,7 +20,7 @@ const Pages: React.FC<IProps> = () => {
   return (
     <AnimatePresence exitBeforeEnter>
       <Routes key={location.pathname} location={location}>
-        <Route path="/" element={<App />}>
+        <Route path="/" element={<Empty />}>
           <Route index element={<FeedPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />

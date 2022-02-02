@@ -10,6 +10,8 @@ import {
   addDoc,
   collection,
   getDocs,
+  limit,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -152,6 +154,17 @@ export class UserHandler {
         id: doc.docs[0].id,
         likes: likes.docs.map((d) => d.data().storyId) as any[],
       } as IUser;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static async getUsers() {
+    try {
+      const q = query(collection(db, "users"), orderBy("createdAt"), limit(10));
+      const docs = await getDocs(q);
+
+      return docs.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IUser[];
     } catch (error) {
       console.error(error);
     }

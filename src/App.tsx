@@ -2,13 +2,14 @@ import { mdiArrowUp } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
-import AnimatedPage from "./components/AnimatedPage";
 import LeftColumn from "./components/layout/LeftColumn";
+import RightColumn from "./components/layout/RightColumn";
 import NotificationBell from "./components/NotificationBell";
 import { auth } from "./firebase/firebase";
 import { useAppDispatch } from "./hooks";
+import Pages from "./routes/Pages";
 import { fetchUserData, setLoading } from "./slices/userSlice";
 
 const App = () => {
@@ -72,11 +73,11 @@ const App = () => {
             <LeftColumn />
           </div>
           <div className="column is-12-mobile is-8-tablet is-7-desktop">
-            <AnimatedPage>
-              <Outlet />
-            </AnimatedPage>
+            <Pages />
           </div>
-          <div className="column is-hidden-mobile">Право</div>
+          <div className="column is-hidden-mobile">
+            <RightColumn />
+          </div>
         </div>
         <ScrollToTop
           smooth
@@ -92,4 +93,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default React.memo(App);
