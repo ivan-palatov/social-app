@@ -6,8 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import SimpleReactLightbox from "simple-react-lightbox";
 import "./index.css";
 import "./modal-fx.min.css";
-import Pages from "./Pages";
-import reportWebVitals from "./reportWebVitals";
+import Pages from "./routes/Pages";
 import { store } from "./store";
 
 ReactDOM.render(
@@ -22,8 +21,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

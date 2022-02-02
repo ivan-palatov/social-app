@@ -5,6 +5,7 @@ import { Columns, Container, Navbar } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, Outlet } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
+import AnimatedPage from "./components/AnimatedPage";
 import { auth } from "./firebase/firebase";
 import { useAppDispatch } from "./hooks";
 import { fetchUserData, setLoading } from "./slices/userSlice";
@@ -65,7 +66,9 @@ const App = () => {
       <Container>
         <Columns className="is-centered">
           <Columns.Column className="is-12-mobile is-8-tablet is-7-desktop">
-            <Outlet />
+            <AnimatedPage>
+              <Outlet />
+            </AnimatedPage>
           </Columns.Column>
         </Columns>
         <ScrollToTop
