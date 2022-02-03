@@ -35,7 +35,7 @@ function FeedPage() {
   }, [dispatch]);
 
   return (
-    <>
+    <div className="mt-3">
       {userState.user && <AddPostForm />}
       {postsState.latestSnapshot.length !== 0 && (
         <Button
@@ -46,7 +46,7 @@ function FeedPage() {
         </Button>
       )}
       <InfinitePosts />
-    </>
+    </div>
   );
 }
 

@@ -25,7 +25,7 @@ const NotificationsPage: React.FC<IProps> = () => {
 
   return (
     <div className="is-flex is-flex-direction-column is-align-items-center">
-      <span className="mb-3">
+      <span className="my-3">
         <strong>Уведомления</strong>
       </span>
       <ul>
