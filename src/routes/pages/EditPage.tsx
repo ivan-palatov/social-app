@@ -5,13 +5,13 @@ import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import Avatar from "../components/edit/Avatar";
-import TextArea from "../components/form/TextArea";
-import TextInput from "../components/form/TextInput";
-import Button from "../components/layout/Button";
-import { auth } from "../firebase/firebase";
-import { UserHandler } from "../firebase/UserHandler";
-import { useAppSelector } from "../hooks";
+import Avatar from "../../components/edit/Avatar";
+import TextArea from "../../components/form/TextArea";
+import TextInput from "../../components/form/TextInput";
+import Button from "../../components/layout/Button";
+import { auth } from "../../firebase/firebase";
+import { UserHandler } from "../../firebase/UserHandler";
+import { useAppSelector } from "../../hooks";
 
 const validationSchema = yup.object({
   name: yup

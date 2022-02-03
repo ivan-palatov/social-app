@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AddCommentForm from "../components/comment/AddCommentForm";
-import Comments from "../components/comment/Comments";
-import Loader from "../components/layout/Loader";
-import Post from "../components/post/Post";
-import { PostHandler } from "../firebase/PostHandler";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { setPosts } from "../slices/postsSlice";
-import { IPost } from "../utils/interfaces";
+import AddCommentForm from "../../components/comment/AddCommentForm";
+import Comments from "../../components/comment/Comments";
+import Loader from "../../components/layout/Loader";
+import Post from "../../components/post/Post";
+import { PostHandler } from "../../firebase/PostHandler";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { setPosts } from "../../slices/postsSlice";
+import { IPost } from "../../utils/interfaces";
 import NotFoundPage from "./NotFoundPage";
 
 function PostPage() {

@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import InfinitePosts from "../components/InfinitePosts";
-import Button from "../components/layout/Button";
-import AddPostForm from "../components/post/AddPostForm";
-import { PostHandler } from "../firebase/PostHandler";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import InfinitePosts from "../../components/InfinitePosts";
+import Button from "../../components/layout/Button";
+import AddPostForm from "../../components/post/AddPostForm";
+import { PostHandler } from "../../firebase/PostHandler";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   setLatestSnapshot,
   setPosts,
   setPostsFromLatestSnapshot,
   setPostsFromSnapshot,
   setPostsType,
-} from "../slices/postsSlice";
+} from "../../slices/postsSlice";
 
 function FeedPage() {
   const postsState = useAppSelector((state) => state.posts);

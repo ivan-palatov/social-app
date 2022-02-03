@@ -10,10 +10,10 @@ import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import TextInput from "../components/form/TextInput";
-import Button from "../components/layout/Button";
-import { UserHandler } from "../firebase/UserHandler";
-import { useAppSelector } from "../hooks";
+import TextInput from "../../components/form/TextInput";
+import Button from "../../components/layout/Button";
+import { UserHandler } from "../../firebase/UserHandler";
+import { useAppSelector } from "../../hooks";
 
 const validationSchema = yup.object({
   name: yup

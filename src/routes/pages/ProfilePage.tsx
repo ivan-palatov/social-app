@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import InfinitePosts from "../components/InfinitePosts";
-import Button from "../components/layout/Button";
-import Loader from "../components/layout/Loader";
-import AddPostForm from "../components/post/AddPostForm";
-import UserInfo from "../components/profile/UserInfo";
-import { PostHandler } from "../firebase/PostHandler";
-import { UserHandler } from "../firebase/UserHandler";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import InfinitePosts from "../../components/InfinitePosts";
+import Button from "../../components/layout/Button";
+import Loader from "../../components/layout/Loader";
+import AddPostForm from "../../components/post/AddPostForm";
+import UserInfo from "../../components/profile/UserInfo";
+import { PostHandler } from "../../firebase/PostHandler";
+import { UserHandler } from "../../firebase/UserHandler";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   setLatestSnapshot,
   setPosts,
   setPostsFromLatestSnapshot,
   setPostsFromSnapshot,
   setPostsType,
-} from "../slices/postsSlice";
-import { IUser } from "../utils/interfaces";
+} from "../../slices/postsSlice";
+import { IUser } from "../../utils/interfaces";
 import NotFoundPage from "./NotFoundPage";
 
 function ProfilePage() {

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Loader from "../components/layout/Loader";
-import { NotificationHandler } from "../firebase/NotificationHandler";
-import { useAppSelector } from "../hooks";
-import { timeSince } from "../utils/timeSince";
+import Loader from "../../components/layout/Loader";
+import { NotificationHandler } from "../../firebase/NotificationHandler";
+import { useAppSelector } from "../../hooks";
+import { timeSince } from "../../utils/timeSince";
 
 interface IProps {}
 

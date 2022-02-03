@@ -1,16 +1,16 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import EditPage from "./EditPage";
 import Empty from "./Empty";
-import FeedPage from "./FeedPage";
-import LoginPage from "./LoginPage";
-import NotFoundPage from "./NotFoundPage";
-import NotificationsPage from "./NotificationsPage";
-import PostPage from "./PostPage";
-import ProfilePage from "./ProfilePage";
-import RegisterPage from "./RegisterPage";
-import ResetPasswordPage from "./ResetPasswordPage";
+import EditPage from "./pages/EditPage";
+import FeedPage from "./pages/FeedPage";
+import LoginPage from "./pages/LoginPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import PostPage from "./pages/PostPage";
+import ProfilePage from "./pages/ProfilePage";
+import RegisterPage from "./pages/RegisterPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 interface IProps {}
 
