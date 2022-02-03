@@ -53,11 +53,11 @@ function PostPage() {
   }
 
   return (
-    <>
+    <div className="mt-3">
       <Post {...post} />
       <AddCommentForm id={id} userHandle={post.user} />
       <Comments postId={id} />
-    </>
+    </div>
   );
 }
 
