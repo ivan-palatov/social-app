@@ -1,9 +1,10 @@
 import { mdiArrowUp } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
+import BurgerButton from "./components/layout/BurgerButton";
 import LeftColumn from "./components/layout/LeftColumn";
 import RightColumn from "./components/layout/RightColumn";
 import NotificationBell from "./components/NotificationBell";
@@ -30,6 +31,11 @@ const App = () => {
     dispatch(fetchUserData(user.uid));
   }, [user, dispatch, loading]);
 
+  const handleBurgerClick = useCallback(
+    () => setIsBurgerActive((state) => !state),
+    []
+  );
+
   return (
     <>
       <nav
@@ -42,22 +48,7 @@ const App = () => {
             Social App
           </Link>
           <NotificationBell />
-          <div
-            onClick={() => setIsBurgerActive(!isBurgerActive)}
-            aria-label="menu"
-            aria-expanded="false"
-            data-target="navigation-menu"
-            role="button"
-            className={
-              isBurgerActive
-                ? "navbar-burger is-active ml-3"
-                : "navbar-burger ml-3"
-            }
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </div>
+          <BurgerButton isActive={isBurgerActive} onClick={handleBurgerClick} />
         </div>
       </nav>
       <div
@@ -97,4 +88,4 @@ const App = () => {
   );
 };
 
-export default React.memo(App);
+export default App;
