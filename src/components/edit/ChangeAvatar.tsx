@@ -2,9 +2,9 @@ import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import { Button } from "react-bulma-components";
 import { UserHandler } from "../../firebase/UserHandler";
 import { useAppSelector } from "../../hooks";
+import Button from "../layout/Button";
 import Modal from "../Modal";
 import AvatarDropzone from "./AvatarDropzone";
 

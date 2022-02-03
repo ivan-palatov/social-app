@@ -1,11 +1,17 @@
-import { mdiAccount, mdiEmail, mdiGoogle, mdiLoading, mdiLock } from "@mdi/js";
+import {
+  mdiAccountOutline,
+  mdiEmailOutline,
+  mdiGoogle,
+  mdiLoading,
+  mdiLockOutline,
+} from "@mdi/js";
 import Icon from "@mdi/react";
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import { Button } from "react-bulma-components";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import TextInput from "../components/form/TextInput";
+import Button from "../components/layout/Button";
 import { UserHandler } from "../firebase/UserHandler";
 import { useAppSelector } from "../hooks";
 
@@ -65,7 +71,7 @@ function RegisterPage() {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.name ? errors.name : undefined}
-              iconPath={mdiAccount}
+              iconPath={mdiAccountOutline}
             />
             <TextInput
               displayName="Email"
@@ -76,7 +82,7 @@ function RegisterPage() {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.email ? errors.email : undefined}
-              iconPath={mdiEmail}
+              iconPath={mdiEmailOutline}
             />
             <TextInput
               displayName="Пароль"
@@ -86,7 +92,7 @@ function RegisterPage() {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.password ? errors.password : undefined}
-              iconPath={mdiLock}
+              iconPath={mdiLockOutline}
             />
             <nav className="level is-fullwidth is-mobile">
               <div className="level-left">

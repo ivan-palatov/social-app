@@ -1,8 +1,8 @@
 import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
-import { Button } from "react-bulma-components";
 import { CommentHandler } from "../../firebase/CommentHandler";
+import Button from "../layout/Button";
 import Modal from "../Modal";
 
 interface IProps {

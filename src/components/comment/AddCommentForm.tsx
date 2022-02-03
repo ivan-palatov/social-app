@@ -1,11 +1,11 @@
 import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
-import { Button } from "react-bulma-components";
 import { CommentHandler } from "../../firebase/CommentHandler";
 import { NotificationHandler } from "../../firebase/NotificationHandler";
 import { useAppSelector } from "../../hooks";
 import AutoExpandingTextArea from "../form/AutoExpandingTextArea";
+import Button from "../layout/Button";
 
 interface IProps {
   id: string;

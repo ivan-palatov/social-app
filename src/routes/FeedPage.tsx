@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Button } from "react-bulma-components";
 import InfinitePosts from "../components/InfinitePosts";
+import Button from "../components/layout/Button";
 import AddPostForm from "../components/post/AddPostForm";
 import { PostHandler } from "../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../hooks";

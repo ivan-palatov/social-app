@@ -1,14 +1,14 @@
-import { mdiAccount, mdiLoading, mdiWeb } from "@mdi/js";
+import { mdiAccountOutline, mdiLoading, mdiWeb } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import Avatar from "../components/edit/Avatar";
 import TextArea from "../components/form/TextArea";
 import TextInput from "../components/form/TextInput";
+import Button from "../components/layout/Button";
 import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
 import { useAppSelector } from "../hooks";
@@ -75,7 +75,7 @@ function EditPage() {
             onBlur={handleBlur}
             value={values.name}
             placeholder="Иванов Иван"
-            iconPath={mdiAccount}
+            iconPath={mdiAccountOutline}
             error={touched.name ? errors.name : undefined}
           />
           <TextInput

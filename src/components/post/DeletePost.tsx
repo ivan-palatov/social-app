@@ -1,10 +1,10 @@
 import { mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
-import { Button } from "react-bulma-components";
 import { PostHandler } from "../../firebase/PostHandler";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { removePost } from "../../slices/postsSlice";
+import Button from "../layout/Button";
 import Modal from "../Modal";
 
 interface IProps {

@@ -1,12 +1,12 @@
-import { mdiEmail, mdiLoading } from "@mdi/js";
+import { mdiEmailOutline, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import { Button } from "react-bulma-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import TextInput from "../components/form/TextInput";
+import Button from "../components/layout/Button";
 import { auth } from "../firebase/firebase";
 import { UserHandler } from "../firebase/UserHandler";
 
@@ -57,7 +57,7 @@ function ResetPasswordPage() {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.email ? errors.email : undefined}
-              iconPath={mdiEmail}
+              iconPath={mdiEmailOutline}
             />
             <nav className="level is-fullwidth is-mobile">
               <div className="level-left">

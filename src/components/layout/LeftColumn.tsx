@@ -5,6 +5,7 @@ import {
   mdiFaceManOutline,
   mdiLogin,
   mdiNewspaperVariantOutline,
+  mdiPencilOutline,
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import React from "react";
@@ -88,6 +89,14 @@ const LeftColumn: React.FC<IProps> = () => {
                   <Icon path={mdiBellOutline} />
                 </span>
                 <span>Новости</span>
+              </Link>
+            </li>
+            <li className="my-2">
+              <Link to="/edit" className="icon-text is-fullwidth py-2">
+                <span className="icon">
+                  <Icon path={mdiPencilOutline} />
+                </span>
+                <span>Редактировать</span>
               </Link>
             </li>
             <li className="my-2">

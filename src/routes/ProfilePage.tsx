@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bulma-components";
 import { useParams } from "react-router-dom";
 import InfinitePosts from "../components/InfinitePosts";
+import Button from "../components/layout/Button";
 import Loader from "../components/layout/Loader";
 import AddPostForm from "../components/post/AddPostForm";
 import UserInfo from "../components/profile/UserInfo";

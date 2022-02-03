@@ -1,10 +1,10 @@
 import { mdiAttachment, mdiLoading } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Button } from "react-bulma-components";
 import { PostHandler } from "../../firebase/PostHandler";
 import { useAppSelector } from "../../hooks";
 import AutoExpandingTextArea from "../form/AutoExpandingTextArea";
+import Button from "../layout/Button";
 import Modal from "../Modal";
 import ImagesDropzone from "./ImagesDropzone";
 import ImagesPreview from "./ImagesPreview";
