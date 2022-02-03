@@ -20,7 +20,7 @@ export class NotificationHandler {
     const q = query(
       collection(db, "notifications"),
       where("to", "==", handle),
-      orderBy("createdAt"),
+      orderBy("createdAt", "desc"),
       limit(20)
     );
 

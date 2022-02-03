@@ -32,7 +32,11 @@ const App = () => {
 
   return (
     <>
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav
+        className="navbar is-success"
+        role="navigation"
+        aria-label="main navigation"
+      >
         <div className="navbar-brand is-align-items-center">
           <Link to="/" className="navbar-item">
             Social App
