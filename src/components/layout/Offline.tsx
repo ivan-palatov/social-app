@@ -37,11 +37,11 @@ const Offline: React.FC<IProps> = () => {
       classes.push("is-danger");
     }
 
-    return classes;
+    return classes.join(" ");
   }, [isOnline, shouldShow]);
 
   return (
-    <div className={classNames.join(" ")} onClick={() => setShouldShow(false)}>
+    <div className={classNames} onClick={() => setShouldShow(false)}>
       <button className="delete"></button>
       {isOnline
         ? "Соединение с сервером успешно восстановлено"

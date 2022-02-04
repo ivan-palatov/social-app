@@ -153,12 +153,14 @@ code {
 .offline-notification {
   position: fixed;
   bottom: -100px;
+  opacity: 0;
   left: 10px;
   transition: 0.3s ease-out;
 }
 
 .offline-notification-active {
   bottom: 10px;
+  opacity: 1;
 }
 
 @media screen and (min-width: 1024px) {
