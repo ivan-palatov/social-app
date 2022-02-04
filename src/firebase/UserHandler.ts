@@ -29,8 +29,6 @@ import {
 export class UserHandler {
   static defaultAvatar = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`;
 
-  static retries = 0;
-
   private static async addUser(
     user: User,
     name: string,
@@ -143,16 +141,16 @@ export class UserHandler {
     }
   }
 
-  static async getUserData(uid: string) {
+  static async getUserData(uid: string): Promise<IUser> {
     try {
+      console.log("Fetching...");
       const q = query(collection(db, "users"), where("uid", "==", uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
+
       const likes = await getDocs(
         query(collection(db, "likes"), where("userHandle", "==", data.handle))
       );
-
-      UserHandler.retries = 0;
 
       return {
         ...data,
@@ -160,12 +158,8 @@ export class UserHandler {
         likes: likes.docs.map((d) => d.data().storyId) as any[],
       } as IUser;
     } catch (error) {
-      if (UserHandler.retries < 5) {
-        await UserHandler.getUserData(uid);
-        UserHandler.retries++;
-      }
-
-      console.error(error);
+      console.warn(error);
+      return await UserHandler.getUserData(uid);
     }
   }
 
