@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import BurgerButton from "./components/layout/BurgerButton";
 import LeftColumn from "./components/layout/LeftColumn";
+import Offline from "./components/layout/Offline";
 import RightColumn from "./components/layout/RightColumn";
 import NotificationBell from "./components/NotificationBell";
 import { auth } from "./firebase/firebase";
@@ -84,6 +85,7 @@ const App = () => {
           className="button is-scroll-to-top is-success"
         />
       </main>
+      <Offline />
     </>
   );
 };

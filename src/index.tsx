@@ -9,6 +9,7 @@ import "./css/bulma-badge.min.css";
 import "./css/bulma-tooltip.min.css";
 import "./css/index.css";
 import "./css/modal-fx.min.css";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { store } from "./store";
 
 ReactDOM.render(
@@ -23,3 +24,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+serviceWorkerRegistration.register();

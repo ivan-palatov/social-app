@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { enableIndexedDbPersistence, getFirestore } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const firebaseConfig = {
@@ -18,6 +18,18 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code === "failed-precondition") {
+    console.error(
+      "Оффлайн режим не поддерживается, когда данное приложение открыто в нескольких вкладках"
+    );
+  } else if (err.code === "unimplemented") {
+    console.error(
+      "Ваш браузер не поддерживает оффлайн режим, рекомендуем обновиться"
+    );
+  }
+});
 
 export const googleProvider = new GoogleAuthProvider();
 

@@ -149,3 +149,21 @@ code {
 .is-fullheight {
   height: 80vh;
 }
+
+.offline-notification {
+  position: fixed;
+  bottom: -100px;
+  left: 10px;
+  transition: 0.3s ease-out;
+}
+
+.offline-notification-active {
+  bottom: 10px;
+}
+
+@media screen and (min-width: 1024px) {
+  .offline-notification {
+    right: 10px;
+    left: auto;
+  }
+}
