@@ -29,6 +29,8 @@ import {
 export class UserHandler {
   static defaultAvatar = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/default_avatar.jpeg?alt=media`;
 
+  static retries = 0;
+
   private static async addUser(
     user: User,
     name: string,
@@ -50,6 +52,7 @@ export class UserHandler {
   static async signInWithGoogle() {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
+
       const q = query(collection(db, "users"), where("uid", "==", user.uid));
       const docs = await getDocs(q);
 
@@ -149,12 +152,19 @@ export class UserHandler {
         query(collection(db, "likes"), where("userHandle", "==", data.handle))
       );
 
+      UserHandler.retries = 0;
+
       return {
         ...data,
         id: doc.docs[0].id,
         likes: likes.docs.map((d) => d.data().storyId) as any[],
       } as IUser;
     } catch (error) {
+      if (UserHandler.retries < 5) {
+        await UserHandler.getUserData(uid);
+        UserHandler.retries++;
+      }
+
       console.error(error);
     }
   }
